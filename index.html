@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Tactical Board Pro - football plays, drills and animations</title>
+<meta name="description" content="Free tactical board for football, futsal and beach soccer. Build plays, animate them, export images and video. No account, works offline." />
+<meta name="theme-color" content="#0d1117" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 5.2l3.6 2.6-1.4 4.2H9.8L8.4 7.8z" fill="currentColor"/></svg>
+      <div>
+        <strong>Tactical Board <span>Pro</span></strong>
+        <input id="title" class="title-input" value="Untitled play" spellcheck="false" aria-label="Play title" />
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <div class="seg">
+        <button class="icon-btn" id="undo" title="Undo (Cmd/Ctrl+Z)" aria-label="Undo">
+          <svg viewBox="0 0 24 24"><path d="M9 7H5V3M5.5 7.5A8 8 0 1 1 4 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="redo" title="Redo (Cmd/Ctrl+Shift+Z)" aria-label="Redo">
+          <svg viewBox="0 0 24 24"><path d="M15 7h4V3M18.5 7.5A8 8 0 1 0 20 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <button class="btn ghost" id="btn-open" title="Saved plays">Library</button>
+      <button class="btn ghost" id="btn-save" title="Save to this browser (Cmd/Ctrl+S)">Save</button>
+
+      <div class="menu-wrap">
+        <button class="btn ghost" id="btn-export"><span class="wide-only">Export</span><span class="m-only-inline">Menu</span> <svg class="caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <div class="menu" id="menu-export" hidden>
+          <button data-act="png">Image of this frame (PNG)</button>
+          <button data-act="sheet">Printable playbook (all frames)</button>
+          <button data-act="video">Animation video (WebM)</button>
+          <hr />
+          <button data-act="json">Download play file (.json)</button>
+          <button data-act="import">Open play file...</button>
+          <hr class="m-only" />
+          <button class="m-only" data-act="save">Save to this browser</button>
+          <button class="m-only" data-act="library">Saved plays</button>
+          <button class="m-only" data-act="share">Copy share link</button>
+          <button class="m-only" data-act="help">Shortcuts and help</button>
+        </div>
+      </div>
+
+      <button class="btn primary" id="btn-share">Share link</button>
+      <button class="icon-btn" id="btn-help" title="Shortcuts and help" aria-label="Help">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.7-.9 1.4v.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.05" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn only-mobile" id="btn-panel" title="Panels" aria-label="Panels">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <nav class="rail" id="rail" aria-label="Tools"></nav>
+
+    <main class="stage" id="stage">
+      <canvas id="board"></canvas>
+      <div class="stage-hint" id="hint"></div>
+      <div class="stage-badge" id="frame-badge">Frame 1</div>
+    </main>
+
+    <aside class="panel" id="panel">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="squad">Squad</button>
+        <button class="tab" data-tab="frame">Frame</button>
+        <button class="tab" data-tab="board">Board</button>
+      </div>
+
+      <section class="tabpane active" data-pane="squad">
+        <div class="team-card" data-team="A">
+          <div class="team-head">
+            <input class="team-name" data-team="A" value="Home" aria-label="Home team name" />
+            <input type="color" class="team-color" data-team="A" value="#e63946" aria-label="Home colour" />
+          </div>
+          <div class="row">
+            <select class="formation" data-team="A" aria-label="Home formation"></select>
+            <button class="btn tiny" data-add-player="A">+ Player</button>
+          </div>
+          <ul class="roster" data-roster="A"></ul>
+        </div>
+
+        <div class="team-card" data-team="B">
+          <div class="team-head">
+            <input class="team-name" data-team="B" value="Away" aria-label="Away team name" />
+            <input type="color" class="team-color" data-team="B" value="#1d6fe0" aria-label="Away colour" />
+          </div>
+          <div class="row">
+            <select class="formation" data-team="B" aria-label="Away formation"></select>
+            <button class="btn tiny" data-add-player="B">+ Player</button>
+          </div>
+          <ul class="roster" data-roster="B"></ul>
+        </div>
+
+        <h4 class="section-title">Equipment</h4>
+        <div class="chips" id="equipment">
+          <button class="chip" data-kind="ball">Ball</button>
+          <button class="chip" data-kind="cone">Cone</button>
+          <button class="chip" data-kind="mannequin">Mannequin</button>
+          <button class="chip" data-kind="minigoal">Mini goal</button>
+          <button class="chip" data-kind="flag">Pole</button>
+          <button class="chip" data-kind="ladder">Ladder</button>
+          <button class="chip" data-kind="hurdle">Hurdle</button>
+          <button class="chip" data-kind="label">Text</button>
+        </div>
+
+        <div class="selected-box" id="selected-box" hidden>
+          <h4 class="section-title">Selected marker</h4>
+          <div class="row">
+            <input id="sel-num" class="mini" placeholder="No." maxlength="3" aria-label="Number" />
+            <input id="sel-name" placeholder="Name" aria-label="Name" />
+          </div>
+          <div class="row">
+            <input type="color" id="sel-color" aria-label="Marker colour" />
+            <button class="btn tiny danger" id="sel-delete">Delete</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabpane" data-pane="frame">
+        <div class="field">
+          <label>Transition time <output id="dur-out">1.0s</output></label>
+          <input type="range" id="dur" min="200" max="5000" step="100" value="1000" />
+        </div>
+        <div class="field">
+          <label for="note">Coaching note for this frame</label>
+          <textarea id="note" rows="3" placeholder="What happens in this step..."></textarea>
+        </div>
+        <div class="chips">
+          <button class="chip" id="f-add">+ New frame</button>
+          <button class="chip" id="f-dup">Duplicate</button>
+          <button class="chip" id="f-del">Delete</button>
+          <button class="chip" id="f-clear">Clear drawings</button>
+        </div>
+        <h4 class="section-title">Assistance</h4>
+        <label class="switch"><input type="checkbox" id="opt-trails" checked /> <span>Show movement preview to next frame</span></label>
+        <label class="switch"><input type="checkbox" id="opt-onion" /> <span>Onion skin of previous frame</span></label>
+        <p class="tip">Tip: drag a marker while holding <kbd>Shift</kbd> to move it on every frame at once.</p>
+      </section>
+
+      <section class="tabpane" data-pane="board">
+        <div class="field">
+          <label for="pitch">Pitch</label>
+          <select id="pitch"></select>
+        </div>
+        <div class="field">
+          <label for="theme">Surface</label>
+          <select id="theme">
+            <option value="grass">Grass</option>
+            <option value="night">Night</option>
+            <option value="chalk">Whiteboard</option>
+            <option value="slate">Slate</option>
+            <option value="sand">Sand</option>
+          </select>
+        </div>
+        <label class="switch"><input type="checkbox" id="opt-stripes" checked /> <span>Mowing stripes</span></label>
+        <label class="switch"><input type="checkbox" id="opt-numbers" checked /> <span>Show numbers</span></label>
+        <label class="switch"><input type="checkbox" id="opt-names" checked /> <span>Show names</span></label>
+        <div class="field">
+          <label>Marker size <output id="msize-out">100%</output></label>
+          <input type="range" id="msize" min="60" max="160" step="5" value="100" />
+        </div>
+        <h4 class="section-title">Danger zone</h4>
+        <div class="chips">
+          <button class="chip" id="b-clear-draw">Clear all drawings</button>
+          <button class="chip danger" id="b-reset">New empty board</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="timeline">
+    <div class="transport">
+      <button class="icon-btn" id="t-prev" title="Previous frame" aria-label="Previous frame">
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7M7 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn play" id="t-play" title="Play (Space)" aria-label="Play">
+        <svg viewBox="0 0 24 24" id="play-icon"><path d="M8 5.5l11 6.5-11 6.5z" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" id="t-next" title="Next frame" aria-label="Next frame">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7M17 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn" id="t-loop" title="Loop" aria-label="Loop">
+        <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 8-8h5m0 0l-2.5-2.5M17 4l-2.5 2.5M20 12a8 8 0 0 1-8 8H7m0 0l2.5 2.5M7 20l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <select id="speed" class="speed" aria-label="Playback speed">
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+      <span class="total" id="total">0.0s</span>
+    </div>
+    <div class="frames" id="frames"></div>
+    <button class="btn tiny add-frame" id="add-frame">+ Frame</button>
+  </footer>
+
+  <div class="toast" id="toast" hidden></div>
+</div>
+
+<dialog id="help-dlg" class="dlg">
+  <h3>Tactical Board Pro</h3>
+  <p class="muted">Everything runs in your browser. Nothing is uploaded, no account needed.</p>
+  <div class="cols">
+    <div>
+      <h4>Tools</h4>
+      <ul class="keys">
+        <li><kbd>V</kbd> Select and move</li>
+        <li><kbd>P</kbd> Pass (solid arrow)</li>
+        <li><kbd>R</kbd> Run without ball (dashed)</li>
+        <li><kbd>D</kbd> Dribble (wavy)</li>
+        <li><kbd>S</kbd> Shot (thick arrow)</li>
+        <li><kbd>L</kbd> Line, <kbd>F</kbd> Free draw</li>
+        <li><kbd>Z</kbd> Zone, <kbd>C</kbd> Ellipse</li>
+        <li><kbd>T</kbd> Text, <kbd>E</kbd> Eraser</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Board</h4>
+      <ul class="keys">
+        <li><kbd>Space</kbd> Play or pause</li>
+        <li><kbd>N</kbd> New frame</li>
+        <li><kbd>,</kbd> <kbd>.</kbd> Previous / next frame</li>
+        <li><kbd>Arrows</kbd> Nudge selection</li>
+        <li><kbd>Delete</kbd> Remove selection</li>
+        <li><kbd>Shift</kbd>+drag Move on all frames</li>
+        <li><kbd>Shift</kbd>+draw Straight line</li>
+        <li><kbd>Cmd/Ctrl</kbd>+<kbd>S</kbd> Save</li>
+      </ul>
+    </div>
+  </div>
+  <h4>How an animation works</h4>
+  <p class="muted">Each frame is a snapshot. Move players on frame 1, press <strong>+ Frame</strong>, move them again, and the board interpolates the movement between the two. Arrows you draw on a frame are revealed as that step plays.</p>
+  <form method="dialog"><button class="btn primary">Got it</button></form>
+</dialog>
+
+<dialog id="lib-dlg" class="dlg">
+  <h3>Saved plays</h3>
+  <div id="lib-list" class="lib-list"></div>
+  <form method="dialog"><button class="btn ghost">Close</button></form>
+</dialog>
+
+<input type="file" id="file-input" accept=".json,application/json" hidden />
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
