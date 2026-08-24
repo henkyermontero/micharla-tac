@@ -1,5 +1,7 @@
 # PitchLab
 
+**En vivo: https://pitchlab-lemon.vercel.app**
+
 Pizarra táctica de fútbol 11 v 11 que corre entera en el navegador. Dibuja el
 esquema, anima la jugada cuadro a cuadro, exporta imagen, guion o video y
 comparte por enlace. Sin cuenta, sin servidor, sin costo.
@@ -137,3 +139,10 @@ resto de la aplicación.
 - Safari graba MP4 pero versiones viejas no graban nada; ahí quedan la imagen y
   el guion imprimible.
 - Los archivos `.tboard.json` de la versión anterior se abren sin problema.
+
+## Licencia
+
+MIT. Ver [LICENSE](LICENSE).
+
+PitchLab es un producto independiente. No usa marcas, logos ni archivos de
+ningun otro sitio de pizarras tacticas.
