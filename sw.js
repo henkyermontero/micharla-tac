@@ -1,9 +1,10 @@
-// sw.js - tiny offline cache so the board works on the training ground with no signal.
-const CACHE = 'tactical-board-v1';
+// sw.js - offline cache so the board works on the training ground with no signal.
+const CACHE = 'pitchlab-v2';
 const ASSETS = [
   './', './index.html', './css/styles.css', './manifest.webmanifest', './icons/icon.svg',
-  './js/main.js', './js/state.js', './js/render.js', './js/pitch.js',
+  './js/main.js', './js/state.js', './js/render.js', './js/pitch.js', './js/view.js',
   './js/interact.js', './js/animate.js', './js/export.js', './js/formations.js',
+  './js/i18n.js', './js/svg.js',
 ];
 
 self.addEventListener('install', (e) => {
@@ -11,7 +12,11 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (e) => {
