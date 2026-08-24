@@ -4,7 +4,14 @@ import { state, loadDoc } from './state.js';
 import { paint, boardRect } from './render.js';
 import { boxSize } from './pitch.js';
 
-function download(blob, filename) {
+// When the page runs inside a sandboxed viewer that blocks plain downloads,
+// hand the file to the host instead. In a normal browser this resolves to null
+// straight away and we fall back to the usual anchor download.
+const hostDownloads = (typeof window !== 'undefined' && window.claude && typeof window.claude.use === 'function')
+  ? window.claude.use('downloads').catch(() => null)
+  : Promise.resolve(null);
+
+function anchorDownload(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -13,6 +20,16 @@ function download(blob, filename) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+function download(blob, filename) {
+  hostDownloads.then((host) => {
+    if (!host) { anchorDownload(blob, filename); return; }
+    host.save({ filename, data: blob }).catch((err) => {
+      if (err && err.code === 'declined') return;
+      anchorDownload(blob, filename);
+    });
+  });
 }
 
 const slug = (s) => (s || 'play').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'play';

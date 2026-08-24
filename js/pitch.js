@@ -181,7 +181,7 @@ function futsal(ctx, P, spec) {
     dot(ctx, P, gx + sign * 6, W / 2, Math.max(1.5, s * 0.15));
     dot(ctx, P, gx + sign * 10, W / 2, Math.max(1.5, s * 0.15));
     ctx.save(); ctx.globalAlpha = 0.85;
-    rect(ctx, P, side ? L : -1.2, W / 2 - goalW / 2, 1.2, goalW);
+    rect(ctx, P, side ? L : -0.9, W / 2 - goalW / 2, 0.9, goalW);
     ctx.restore();
     arc(ctx, P, gx, 0, 0.25, side ? Math.PI / 2 : 0, side ? Math.PI : Math.PI / 2);
     arc(ctx, P, gx, W, 0.25, side ? Math.PI : -Math.PI / 2, side ? Math.PI * 1.5 : 0);
@@ -201,7 +201,7 @@ function beach(ctx, P, spec) {
   ctx.restore();
   for (const side of [0, 1]) {
     ctx.save(); ctx.globalAlpha = 0.85;
-    rect(ctx, P, side ? L : -1.5, W / 2 - 2.75, 1.5, 5.5);
+    rect(ctx, P, side ? L : -1.0, W / 2 - 2.75, 1.0, 5.5);
     ctx.restore();
   }
 }

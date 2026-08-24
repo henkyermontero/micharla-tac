@@ -9,7 +9,7 @@ export const lerp = (a, b, t) => a + (b - a) * t;
 /* ---------- geometry helpers ---------- */
 
 export function boardRect(cw, ch, pitchKey, pad) {
-  if (pad == null) pad = Math.max(12, Math.min(cw, ch) * 0.045);
+  if (pad == null) pad = Math.max(12, Math.min(cw, ch) * 0.05);
   const box = boxSize(pitchKey);
   const aspect = box.w / box.h;
   let w = cw - pad * 2;
