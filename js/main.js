@@ -141,9 +141,13 @@ function computeRects() {
   rect = applyView(base);
 }
 
+let lastW = 0, lastH = 0, lastDpr = 0;
+
 function resize() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
   const w = stage.clientWidth, h = stage.clientHeight;
+  if (!w || !h) return;            // laid out in a hidden or background tab
+  lastW = w; lastH = h; lastDpr = dpr;
   canvas.width = Math.round(w * dpr);
   canvas.height = Math.round(h * dpr);
   canvas.style.width = w + 'px';
@@ -153,7 +157,22 @@ function resize() {
   render();
 }
 
+/**
+ * Self heal: a tab that lays out while hidden, a window moved to a screen with a
+ * different pixel ratio, or any resize we did not hear about leaves the canvas
+ * at the wrong size and the board paints into a corner. Catch it before drawing.
+ */
+function ensureCanvasSize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = stage.clientWidth, h = stage.clientHeight;
+  if (!w || !h) return false;
+  if (w === lastW && h === lastH && dpr === lastDpr) return false;
+  resize();
+  return true;
+}
+
 function render() {
+  if (ensureCanvasSize()) return;  // resize() repaints on its own
   paint(ctx, stage.clientWidth, stage.clientHeight, {
     rect, draft: draft || undefined, draftOpen, marquee,
   });
@@ -964,7 +983,15 @@ function wire() {
   $('#welcome-tour').onclick = () => { $('#welcome-dlg').close(); $('#help-dlg').showModal(); };
 
   document.addEventListener('keydown', onKey);
-  window.addEventListener('resize', () => { computeRects(); resize(); });
+  // ResizeObserver catches layout changes a window resize event never reports:
+  // a tab that was in the background while loading, panels opening, split view.
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => resize()).observe(stage);
+  }
+  window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', () => setTimeout(resize, 120));
+  window.addEventListener('pageshow', resize);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) resize(); });
   window.addEventListener('beforeunload', autosave);
 }
 
