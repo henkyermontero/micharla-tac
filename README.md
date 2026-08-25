@@ -1,6 +1,8 @@
 # PitchLab
 
-**En vivo: https://pitchlab-lemon.vercel.app**
+**En vivo: https://fredymontero.com/pitchlab**
+
+(el mismo despliegue tambien responde en https://pitchlab-lemon.vercel.app)
 
 Pizarra táctica de fútbol 11 v 11 que corre entera en el navegador. Dibuja el
 esquema, anima la jugada cuadro a cuadro, exporta imagen, guion o video y
@@ -21,6 +23,10 @@ No hay build. Cualquier hosting estático sirve (Vercel, GitHub Pages, Netlify):
 ```bash
 vercel deploy --prod
 ```
+
+`fredymontero.com/pitchlab` no tiene una copia de estos archivos: el sitio hace
+un rewrite hacia este despliegue, asi que cada `vercel deploy --prod` de aqui
+actualiza tambien esa ruta.
 
 ## Qué hace
 
