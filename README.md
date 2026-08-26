@@ -1,6 +1,9 @@
 # MiCharla Tac
 
-**En vivo: https://fredymontero.com/pitchlab**
+**En vivo: https://fredymontero.com/micharla-tac**
+
+La ruta anterior `/pitchlab` redirige aqui de forma permanente, asi que
+cualquier enlace de jugada que ya hayas compartido sigue abriendo.
 
 Pizarra táctica de fútbol 11 v 11 que corre entera en el navegador. Dibuja el
 esquema, anima la jugada cuadro a cuadro, exporta imagen, guion o video y
@@ -11,7 +14,7 @@ Interfaz en español por defecto, con inglés disponible en el selector de idiom
 ## Cómo correrlo
 
 ```bash
-cd ~/pitchlab
+cd ~/micharla-tac
 python3 -m http.server 8787
 # abrir http://localhost:8787
 ```
@@ -22,13 +25,13 @@ No hay build. Cualquier hosting estático sirve (Vercel, GitHub Pages, Netlify):
 vercel deploy --prod
 ```
 
-`fredymontero.com/pitchlab` sirve una **copia** de estos archivos, no un rewrite.
+`fredymontero.com/micharla-tac` sirve una **copia** de estos archivos, no un rewrite.
 Este repositorio es la fuente de la verdad. Para publicar un cambio:
 
 ```bash
-cd ~/pitchlab && git commit -am "..."          # 1. cambia aqui
+cd ~/micharla-tac && git commit -am "..."          # 1. cambia aqui
 cd ~/from-the-field-to-code
-./scripts/sync-pitchlab.sh                     # 2. copia al sitio
+./scripts/sync-micharla-tac.sh                     # 2. copia al sitio
 vercel deploy --prod                           # 3. publica (git push NO publica)
 ```
 
