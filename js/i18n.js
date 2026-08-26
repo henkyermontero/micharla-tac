@@ -1,4 +1,5 @@
 // i18n.js - Spanish first, English available. t('a.b') reads a nested key.
+import './legacy.js';
 
 const DICT = {
   es: {
