@@ -29,9 +29,13 @@
   --accent-2:#2bb673;
   --warn:#ff6b6b;
   --radius:12px;
+  --topbar:56px;
   --rail:60px;
   --panel-w:308px;
   --tl:104px;
+  --tl-anim:132px;
+  --thumb:66px;
+  --pal-h:54px;   /* palette height; the lifted pills clear it */
   --shadow:0 10px 30px rgba(0,0,0,.45);
   font-synthesis-weight:none;
 }
@@ -54,7 +58,7 @@ kbd{
 
 .app{
   position:fixed;inset:0;display:grid;
-  grid-template-rows:56px 1fr var(--tl);
+  grid-template-rows:var(--topbar) 1fr var(--tl);
 }
 /* grid items default to min-width:auto, which lets the timeline stretch the app
    wider than the phone screen. Pin every row to the container instead. */
@@ -123,6 +127,9 @@ kbd{
   background:var(--panel);border-right:1px solid var(--line);
   padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:4px;overflow-y:auto
 }
+.rail>*{flex:none}   /* flex children shrink by default: without this the rail
+                          squashed a 44px tool down to 19px on a short screen
+                          instead of scrolling, which is what overflow-y is for */
 .rail .tool{
   position:relative;width:44px;height:42px;display:grid;place-items:center;border:0;border-radius:10px;
   background:transparent;color:var(--ink-dim);cursor:pointer;transition:background .15s,color .15s
@@ -234,7 +241,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
   position:relative;flex:none;border:2px solid var(--line);border-radius:9px;overflow:hidden;
   cursor:pointer;background:#0c131c;transition:border-color .15s,transform .1s
 }
-.frame-card canvas{display:block;height:66px;width:auto}
+.frame-card canvas{display:block;height:var(--thumb);width:auto}
 .frame-card.active{border-color:var(--accent)}
 .frame-card:active{transform:scale(.97)}
 .frame-card .n{
@@ -285,7 +292,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
   .only-mobile{display:grid}
   .workspace{grid-template-columns:var(--rail) 1fr}
   .panel{
-    position:fixed;top:56px;right:0;bottom:0;width:min(320px,88vw);z-index:60;
+    position:fixed;top:var(--topbar);right:0;bottom:0;width:min(320px,88vw);z-index:60;
     transform:translateX(101%);transition:transform .22s ease;box-shadow:var(--shadow)
   }
   .panel.open{transform:none}
@@ -421,17 +428,165 @@ input[type=range]{accent-color:var(--accent);width:100%}
   position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(6,10,15,.9));
   font-size:10px;padding:8px 4px 3px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
-.timeline.anim{--tl:132px}
-.app.anim{grid-template-rows:56px 1fr 132px}
-.app.anim .frame-card canvas{height:88px}
+.timeline.anim{--tl:var(--tl-anim)}
+.app.anim{grid-template-rows:var(--topbar) 1fr var(--tl-anim)}
+.app.anim .frame-card canvas{height:calc(var(--thumb) * 1.34)}
 
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 @media (max-width:860px){
   .mode-switch{display:none}
   .palette{bottom:8px;padding:5px 7px;max-width:calc(100% - 16px)}
-  .zoomer{bottom:66px;right:8px}
+  .zoomer{bottom:calc(8px + var(--pal-h) + 8px);right:8px}
   .p-item{width:34px;height:34px}
   .status{display:none}
   .lang{display:none}
 }
+
+/* ============ bigger screens ============
+   Everything above is sized for a laptop and only ever shrinks. On a 27"
+   monitor that left the pitch huge and the controls around it phone-sized.
+   These two steps grow the chrome with the screen. The pitch already scales
+   on its own, so it is deliberately untouched here. */
+
+@media (min-width:1600px){
+  :root{
+    --pal-h:62px;--topbar:64px;--rail:72px;--panel-w:352px;--tl:118px;--tl-anim:150px;--thumb:78px;--radius:13px;
+  }
+  body{font-size:15px}
+  .brand svg{width:30px;height:30px}
+  .brand strong{font-size:15px}
+  .title-input{font-size:13px;width:230px}
+  .mode{padding:8px 18px;font-size:14px}
+  .btn{padding:9px 15px;font-size:14px;border-radius:11px}
+  .btn.tiny{padding:6px 11px;font-size:13px}
+  .icon-btn{width:40px;height:38px}
+  .icon-btn svg{width:22px;height:22px}
+  .icon-btn.play{width:46px;height:42px}
+  .lang{font-size:13px;padding:7px 10px}
+  .rail .tool{width:54px;height:50px;border-radius:12px}
+  .rail .tool svg{width:26px;height:26px}
+  .rail .tool .sc{font-size:10px}
+  .swatch{width:23px;height:23px}
+  .wbtn{width:42px;height:30px}
+  .wbtn i{width:24px}
+  .tab{font-size:14px;padding:13px 0}
+  .tabpane{padding:14px;gap:12px}
+  .chip{font-size:13px;padding:7px 13px}
+  .section-title{font-size:12px}
+  .p-item{width:44px;height:44px;border-radius:13px}
+  .p-token{width:30px;height:30px;font-size:12px}
+  .p-glyph{width:27px;height:27px}
+  .palette{max-width:min(94%,880px);gap:7px;padding:8px 11px}
+  .status,.stage-hint,.stage-badge{font-size:13px}
+  .zoom-level{font-size:13px;min-width:52px}
+  .total{font-size:13px}
+  .speed{width:72px;font-size:13px}
+}
+
+@media (min-width:2100px){
+  :root{
+    --pal-h:72px;--topbar:72px;--rail:82px;--panel-w:400px;--tl:132px;--tl-anim:170px;--thumb:90px;
+  }
+  body{font-size:16px}
+  .brand svg{width:34px;height:34px}
+  .brand strong{font-size:17px}
+  .title-input{font-size:14px;width:270px}
+  .mode{padding:10px 22px;font-size:15px}
+  .btn{padding:11px 18px;font-size:15px}
+  .icon-btn{width:44px;height:42px}
+  .icon-btn svg{width:24px;height:24px}
+  .icon-btn.play{width:52px;height:46px}
+  .rail .tool{width:62px;height:58px}
+  .rail .tool svg{width:30px;height:30px}
+  .swatch{width:27px;height:27px}
+  .wbtn{width:48px;height:34px}
+  .wbtn i{width:28px}
+  .tab{font-size:15px;padding:15px 0}
+  .chip{font-size:14px;padding:8px 15px}
+  .p-item{width:50px;height:50px}
+  .p-token{width:34px;height:34px;font-size:13px}
+  .p-glyph{width:31px;height:31px}
+  .palette{max-width:min(94%,1000px);gap:8px;padding:9px 13px}
+  .status,.stage-hint,.stage-badge{font-size:14px}
+}
+
+/* The three pills along the bottom of the stage (tool hint, token palette,
+   zoom) are each positioned from their own corner, so on a tighter stage the
+   centred palette runs into the other two. iPad landscape hit this: the first
+   token sat underneath the hint. Lift the two secondary pills one row and
+   leave the bottom band to the palette. */
+@media (max-width:1400px){
+  .status,.zoomer{bottom:calc(12px + var(--pal-h) + 10px)}
+}
+
+/* ============ touch ============
+   iPad, and any touchscreen. Every target here was under 44px, some as small
+   as 19px, which is a coin-flip with a finger. */
+@media (pointer:coarse){
+  :root{--rail:76px;--pal-h:64px}
+  .rail .tool{width:60px;height:48px}
+  .rail .tool svg{width:26px;height:26px}
+  .swatch{width:34px;height:34px;border-width:3px}
+  .swatches{gap:7px}
+  .wbtn{width:56px;height:40px}
+  .icon-btn{width:46px;height:44px}
+  .icon-btn svg{width:22px;height:22px}
+  .icon-btn.play{width:54px;height:46px}
+  .btn{padding:11px 16px;min-height:44px}
+  .btn.tiny{padding:9px 13px;min-height:40px}
+  .mode{padding:11px 18px}
+  .tab{padding:16px 0}
+  .chip{padding:10px 15px;min-height:40px}
+  .p-item{width:48px;height:48px}
+  .p-token{width:32px;height:32px}
+  .p-glyph{width:28px;height:28px}
+  .switch input{width:22px;height:22px}
+  .lang{padding:10px 12px;min-height:44px}
+  .speed{min-height:40px}
+  input[type=color]{width:44px;height:38px}
+  select,textarea,input[type=text],input:not([type]){padding:10px 11px}
+  /* hover never fires on a touchscreen, so this delete button was unreachable */
+  .frame-card .x{display:block;width:28px;height:28px;font-size:15px;right:5px;top:5px}
+  .roster li{padding:7px 10px}
+  .zoom-level{padding:10px 8px;min-width:56px;font-size:13px}
+  .zoomer{padding:4px}
+}
+
+/* A landscape tablet is wide but short: fourteen tools stacked in one column
+   ran ~400px past the bottom of the rail, so the eraser and the colours were
+   only reachable by scrolling a toolbar most people never think to scroll.
+   Two columns fit the whole set on screen. Portrait tablets are tall enough
+   to keep the single column, and keep their width for the pitch. */
+@media (pointer:coarse) and (max-height:1100px) and (min-width:861px){
+  :root{--rail:158px}
+  .rail{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:6px;
+    justify-items:center;align-content:start;padding:8px 6px
+  }
+  .rail .tool{width:100%;max-width:64px}
+  .rail .sep{grid-column:1/-1;width:80%}
+  .rail .swatches{grid-column:1/-1;grid-template-columns:repeat(4,32px);justify-content:center;width:100%;gap:6px}
+  .rail .swatch{width:32px;height:32px}
+  .rail .widths{grid-column:1/-1;flex-direction:row;justify-content:center;width:100%;gap:6px}
+}
+
+/* A touchscreen on a big monitor gets both blocks; keep the rail wide enough
+   for the larger tool button either way. */
+/* A phone is a touchscreen too, but 390px of width cannot spare a 76px rail.
+   Keep it narrow there and let the rail scroll as it already did. The cutoff
+   is 700px, not the 860px the layout uses: a portrait iPad is 820px wide and
+   lands on the mobile layout, but it is still a tablet and should get tablet
+   sized controls, not phone ones. Its panel is an overlay there, so the wider
+   rail costs the pitch nothing. */
+@media (pointer:coarse) and (max-width:700px){
+  :root{--rail:58px}
+  .rail .tool{width:50px;height:44px}
+  .rail .tool svg{width:23px;height:23px}
+  .swatch{width:22px;height:22px}
+  .swatches{gap:5px}
+  .wbtn{width:40px;height:30px}
+}
+
+@media (pointer:coarse) and (min-width:1600px){:root{--rail:84px;--pal-h:68px}}
+@media (pointer:coarse) and (min-width:2100px){:root{--rail:92px;--pal-h:76px}}
