@@ -6,7 +6,7 @@ import { boxSize } from './pitch.js';
 import { SvgCtx } from './svg.js';
 import { t } from './i18n.js';
 
-export const BRAND = 'PitchLab';
+export const BRAND = 'MiCharla Tac';
 
 const hostDownloads = (typeof window !== 'undefined' && window.claude && typeof window.claude.use === 'function')
   ? window.claude.use('downloads').catch(() => null)
@@ -38,7 +38,7 @@ const slug = (s) => (s || 'jugada').toLowerCase()
   .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'jugada';
 
 const title = () => (state.doc.title || '').trim();
-const fileBase = () => slug(title() || 'pitchlab');
+const fileBase = () => slug(title() || 'micharla-tac');
 
 function frameSize(width) {
   const box = boxSize(state.doc.pitch);
@@ -120,7 +120,7 @@ export function exportSheet(width = 2200) {
   ctx.fillStyle = '#fff';
   ctx.font = `700 ${Math.round(width * 0.026)}px Inter, system-ui, sans-serif`;
   ctx.textBaseline = 'middle';
-  ctx.fillText(title() || 'PitchLab', gap * 1.5, headH / 2 + 4);
+  ctx.fillText(title() || 'MiCharla Tac', gap * 1.5, headH / 2 + 4);
   ctx.font = `600 ${Math.round(width * 0.014)}px Inter, system-ui, sans-serif`;
   ctx.fillStyle = 'rgba(255,255,255,.45)';
   ctx.textAlign = 'right';
@@ -239,7 +239,7 @@ export function thumbnail(width = 320) {
 
 export function exportJSON() {
   const blob = new Blob([JSON.stringify(state.doc, null, 2)], { type: 'application/json' });
-  download(blob, `${fileBase()}.pitchlab.json`);
+  download(blob, `${fileBase()}.micharlatac.json`);
 }
 
 export function importJSON(file) {

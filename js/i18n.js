@@ -2,7 +2,7 @@
 
 const DICT = {
   es: {
-    brand: { name: 'PitchLab', tagline: 'Pizarra táctica 11 vs 11' },
+    brand: { name: 'MiCharla Tac', tagline: 'Pizarra táctica 11 vs 11' },
     top: {
       title: 'Título de la jugada', undo: 'Deshacer', redo: 'Rehacer',
       library: 'Mis pizarras', save: 'Guardar', menu: 'Menú', exportBtn: 'Exportar',
@@ -112,7 +112,7 @@ const DICT = {
       search: 'Buscar...', dup: 'Duplicar',
     },
     help: {
-      title: 'PitchLab', sub: 'Todo corre en tu navegador. Nada se sube, no hace falta cuenta.',
+      title: 'MiCharla Tac', sub: 'Todo corre en tu navegador. Nada se sube, no hace falta cuenta.',
       tools: 'Herramientas', board: 'Pizarra', how: 'Cómo funciona la animación',
       howBody: 'Cada cuadro es una foto. Mueve a los jugadores en el cuadro 1, pulsa Nuevo cuadro, muévelos otra vez y la pizarra interpola el movimiento. Las flechas que dibujas en un cuadro se van trazando mientras ese paso se reproduce.',
       ok: 'Entendido',
@@ -128,7 +128,7 @@ const DICT = {
     },
   },
   en: {
-    brand: { name: 'PitchLab', tagline: '11 v 11 tactical board' },
+    brand: { name: 'MiCharla Tac', tagline: '11 v 11 tactical board' },
     top: {
       title: 'Play title', undo: 'Undo', redo: 'Redo', library: 'My boards', save: 'Save',
       menu: 'Menu', exportBtn: 'Export', share: 'Copy link', help: 'Shortcuts and help',
@@ -226,7 +226,7 @@ const DICT = {
       frames: 'frames', close: 'Close', search: 'Search...', dup: 'Duplicate',
     },
     help: {
-      title: 'PitchLab', sub: 'Everything runs in your browser. Nothing is uploaded, no account needed.',
+      title: 'MiCharla Tac', sub: 'Everything runs in your browser. Nothing is uploaded, no account needed.',
       tools: 'Tools', board: 'Board', how: 'How the animation works',
       howBody: 'Every frame is a snapshot. Move the players on frame 1, press New frame, move them again, and the board interpolates the movement. Arrows you draw on a frame are revealed as that step plays.',
       ok: 'Got it',
@@ -242,7 +242,7 @@ const DICT = {
   },
 };
 
-const LS_LANG = 'pitchlab.lang';
+const LS_LANG = 'micharlatac.lang';
 export const LANGS = [['es', 'Español'], ['en', 'English']];
 
 // Spanish is the product default; the switcher remembers a different choice.

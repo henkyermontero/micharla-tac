@@ -30,7 +30,7 @@ export function emptyFrame(duration = 1000) {
 export function newDoc(pitch = 'full') {
   return {
     v: 3,
-    app: 'pitchlab',
+    app: 'micharlatac',
     title: '',
     pitch,
     theme: 'grass',
@@ -348,8 +348,28 @@ function remapShape(sh, conv) {
 
 /* ---------------- persistence ---------------- */
 
-const LS_KEY = 'pitchlab.library.v1';
-const LS_LAST = 'pitchlab.last.v1';
+const LS_KEY = 'micharlatac.library.v1';
+const LS_LAST = 'micharlatac.last.v1';
+
+/* The app used to be called PitchLab and stored under pitchlab.* keys.
+   Carry those boards over once so nobody loses their work in the rename.
+   Copies, never deletes: an old build left open in another tab still reads. */
+(function migrateLegacyKeys() {
+  const pairs = [
+    ['pitchlab.library.v1', LS_KEY],
+    ['pitchlab.last.v1', LS_LAST],
+    ['pitchlab.lang', 'micharlatac.lang'],
+    ['pitchlab.seen', 'micharlatac.seen'],
+    ['pitchlab.coach.anim', 'micharlatac.coach.anim'],
+  ];
+  try {
+    for (const [from, to] of pairs) {
+      if (localStorage.getItem(to) !== null) continue;   // already migrated or set
+      const v = localStorage.getItem(from);
+      if (v !== null) localStorage.setItem(to, v);
+    }
+  } catch {}
+})();
 
 export function library() {
   try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; }

@@ -1,6 +1,6 @@
 {
-  "name": "PitchLab - pizarra táctica",
-  "short_name": "PitchLab",
+  "name": "MiCharla Tac - pizarra táctica",
+  "short_name": "MiCharla Tac",
   "description": "Pizarra táctica de fútbol 11 v 11: dibuja el esquema, anima la jugada y exporta imagen o video.",
   "lang": "es",
   "start_url": "./",

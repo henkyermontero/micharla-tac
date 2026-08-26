@@ -1,10 +1,11 @@
 // sw.js - offline cache so the board works on the training ground with no signal.
-const CACHE = 'pitchlab-v2';
+const CACHE = 'micharlatac-v1';
 const ASSETS = [
   './', './index.html', './css/styles.css', './manifest.webmanifest', './icons/icon.svg',
   './js/main.js', './js/state.js', './js/render.js', './js/pitch.js', './js/view.js',
   './js/interact.js', './js/animate.js', './js/export.js', './js/formations.js',
   './js/i18n.js', './js/svg.js',
+  './fonts/inter-latin.woff2', './fonts/inter-latin-ext.woff2',
 ];
 
 self.addEventListener('install', (e) => {

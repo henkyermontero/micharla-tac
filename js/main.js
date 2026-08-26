@@ -692,8 +692,8 @@ function setAnimateMode(on) {
   if (on) {
     $$('.tab').forEach((x) => x.classList.toggle('active', x.dataset.tab === 'frame'));
     $$('.tabpane').forEach((p) => p.classList.toggle('active', p.dataset.pane === 'frame'));
-    if (!localStorage.getItem('pitchlab.coach.anim')) {
-      localStorage.setItem('pitchlab.coach.anim', '1');
+    if (!localStorage.getItem('micharlatac.coach.anim')) {
+      localStorage.setItem('micharlatac.coach.anim', '1');
       showCoach(t('coach.animate'));
     }
   }
@@ -1085,8 +1085,8 @@ async function boot() {
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
-  if (!localStorage.getItem('pitchlab.seen')) {
-    localStorage.setItem('pitchlab.seen', '1');
+  if (!localStorage.getItem('micharlatac.seen')) {
+    localStorage.setItem('micharlatac.seen', '1');
     $('#welcome-dlg').showModal();
   }
 }

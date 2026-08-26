@@ -1,8 +1,6 @@
-# PitchLab
+# MiCharla Tac
 
 **En vivo: https://fredymontero.com/pitchlab**
-
-(el mismo despliegue tambien responde en https://pitchlab-lemon.vercel.app)
 
 Pizarra táctica de fútbol 11 v 11 que corre entera en el navegador. Dibuja el
 esquema, anima la jugada cuadro a cuadro, exporta imagen, guion o video y
@@ -13,7 +11,7 @@ Interfaz en español por defecto, con inglés disponible en el selector de idiom
 ## Cómo correrlo
 
 ```bash
-cd ~/tactical-board
+cd ~/pitchlab
 python3 -m http.server 8787
 # abrir http://localhost:8787
 ```
@@ -24,16 +22,22 @@ No hay build. Cualquier hosting estático sirve (Vercel, GitHub Pages, Netlify):
 vercel deploy --prod
 ```
 
-`fredymontero.com/pitchlab` no tiene una copia de estos archivos: el sitio hace
-un rewrite hacia este despliegue, asi que cada `vercel deploy --prod` de aqui
-actualiza tambien esa ruta.
+`fredymontero.com/pitchlab` sirve una **copia** de estos archivos, no un rewrite.
+Este repositorio es la fuente de la verdad. Para publicar un cambio:
+
+```bash
+cd ~/pitchlab && git commit -am "..."          # 1. cambia aqui
+cd ~/from-the-field-to-code
+./scripts/sync-pitchlab.sh                     # 2. copia al sitio
+vercel deploy --prod                           # 3. publica (git push NO publica)
+```
 
 ## Qué hace
 
 **Campo** 11v11 completo, medio campo, vertical, medio vertical, último tercio,
 9v9, 7v7, futsal, fútbol playa, rejilla de entrenamiento y pizarra en blanco.
 Cinco superficies, franjas de corte, tercios y carriles, rejilla.
-Medidas reales en metros (105 x 68 y las marcas FIFA).
+Medidas reglamentarias en metros (105 x 68 y las marcas oficiales del campo).
 
 **Fichas** Dos equipos con nombre, color, número y nombre de jugador editables.
 Formaciones por tamaño de equipo: 11 (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2 y más),
@@ -60,7 +64,7 @@ repetición. Las flechas de un cuadro se van trazando mientras ese paso corre.
 - Guion imprimible con todos los cuadros, su fase y su nota
 - Video de la animación en MP4 donde el navegador lo permite (Chrome, Edge,
   Safari recientes) y WebM en el resto
-- Archivo `.pitchlab.json` para guardar y reabrir
+- Archivo `.micharlatac.json` para guardar y reabrir
 - Enlace: la jugada entera viaja comprimida en la URL, no se sube nada
 
 **Guardado** Autoguardado local en cada cambio, biblioteca de pizarras en el
@@ -144,11 +148,24 @@ resto de la aplicación.
 
 - Safari graba MP4 pero versiones viejas no graban nada; ahí quedan la imagen y
   el guion imprimible.
-- Los archivos `.tboard.json` de la versión anterior se abren sin problema.
+- Los archivos `.tboard.json` y `.pitchlab.json` de versiones anteriores se
+  abren sin problema: el lector nunca miró el nombre, solo el contenido.
+- Las pizarras guardadas antes del cambio de nombre se migran solas la primera
+  vez que abres esta versión. Ver `migrateLegacyKeys` en `js/state.js`.
 
-## Licencia
+## Licencia y créditos
 
-MIT. Ver [LICENSE](LICENSE).
+El código es MIT. Ver [LICENSE](LICENSE).
 
-PitchLab es un producto independiente. No usa marcas, logos ni archivos de
-ningun otro sitio de pizarras tacticas.
+La tipografía **Inter** (© 2016 The Inter Project Authors) va incluida en
+`fonts/` bajo la SIL Open Font License 1.1. Ver [fonts/OFL.txt](fonts/OFL.txt).
+Se sirve desde este mismo dominio a propósito: ninguna petición sale del
+navegador del usuario para cargar una fuente.
+
+Todo lo demás (código, iconos, textos) es original.
+
+MiCharla Tac es un producto independiente. No está afiliado, patrocinado ni
+avalado por ninguna federación, club, marca deportiva ni por ningún otro sitio
+de pizarras tácticas. Las medidas del campo son datos reglamentarios de dominio
+público. Los nombres de formaciones (4-4-2, 4-3-3) son terminología común del
+fútbol.
