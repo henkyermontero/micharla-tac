@@ -73,7 +73,16 @@ repetición. Las flechas de un cuadro se van trazando mientras ese paso corre.
 **Guardado** Autoguardado local en cada cambio, biblioteca de pizarras en el
 navegador con miniatura, búsqueda y duplicado. Todo vive en `localStorage`.
 
-**Sin conexión** Service worker + PWA instalable.
+**Sin conexión** Service worker + PWA instalable. Verificado de verdad: se
+carga una vez con señal, se corta la red y la pizarra sigue entera. Sirve para
+la cancha sin cobertura.
+
+**Pantallas** La interfaz se dimensiona sola. En monitores grandes (desde
+1600px y otra vez desde 2100px) crecen la barra superior, el riel, el panel,
+las miniaturas y la tipografía, no solo la cancha. En pantallas táctiles cada
+control se agranda para el dedo, y en tablet horizontal el riel pasa a dos
+columnas para que las catorce herramientas quepan sin hacer scroll. Los
+teléfonos quedan fuera de ese ensanchamiento por debajo de 700px.
 
 ## Atajos
 
@@ -153,8 +162,13 @@ resto de la aplicación.
   el guion imprimible.
 - Los archivos `.tboard.json` y `.pitchlab.json` de versiones anteriores se
   abren sin problema: el lector nunca miró el nombre, solo el contenido.
-- Las pizarras guardadas antes del cambio de nombre se migran solas la primera
-  vez que abres esta versión. Ver `migrateLegacyKeys` en `js/state.js`.
+- Las pizarras guardadas antes de los dos cambios de nombre se migran solas la
+  primera vez que abres esta versión: `tacticalboard.*` y `pitchlab.*` pasan a
+  `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es
+  importado por `i18n.js` y `state.js` para que corra antes que cualquier
+  lectura de `localStorage`.
+- `sw.js` cachea la lista `ASSETS`. Si agregas un archivo al proyecto, agrégalo
+  ahí y sube `CACHE` a la versión siguiente, o la app se rompe sin conexión.
 
 ## Licencia y créditos
 
