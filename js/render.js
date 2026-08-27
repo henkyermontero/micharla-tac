@@ -252,72 +252,31 @@ export function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-const TAU = Math.PI * 2;
-const UP = -Math.PI / 2;
-
-function pentagon(ctx, cx, cy, rad, rot) {
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    const a = rot + (i / 5) * TAU;
-    const px = cx + Math.cos(a) * rad;
-    const py = cy + Math.sin(a) * rad;
-    if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
-  }
-  ctx.closePath();
-}
-
 /**
- * El balon clasico: pentagono negro al centro, las costuras que salen de sus
- * vertices y, cuando hay tamano para ello, los cinco parches del borde
- * recortados contra el circulo. Eso es lo que lo hace leer como un balon de
- * cuero y no como un circulo con un punto.
+ * El balon es el emoji de balon, dibujado como texto en el lienzo. Fred lo pidio
+ * asi y es lo correcto: cualquier figura que dibujaramos a mano seria una
+ * imitacion peor de algo que el sistema ya trae bien hecho, y ademas la gente ya
+ * reconoce ese balon de memoria.
  *
- * Dos versiones a proposito. Un balon en su tamano normal mide unos 24 px en
- * pantalla: ahi los cinco parches mas el contorno se comen el blanco y queda un
- * borron oscuro. Probado mirandolo. Por debajo de 13 px de radio se dibuja solo
- * el pentagono y las costuras, que a ese tamano es lo que se lee.
+ * Sale de la fuente de emoji del sistema, que ya esta en el dispositivo: no se
+ * pide nada a la red, igual que con Inter. Se ve un poco distinto en Mac, en
+ * Android y en Windows, y esta bien: en los tres es un balon de futbol.
  *
- * Sin degradados: svg.js no tiene createRadialGradient y el mismo codigo tiene
- * que producir el PNG y el SVG.
+ * El multiplicador y el desplazamiento estan medidos mirando el resultado, no
+ * calculados: un glifo de emoji no llena su em y no se sienta en el centro.
  */
+const EMOJI_FONT = "'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji','EmojiOne Color',sans-serif";
+
 function ballGlyph(ctx, x, y, r) {
-  const ink = '#14181e';
-  const full = r >= 13;
-
-  ctx.beginPath(); ctx.arc(x, y, r, 0, TAU);
-  ctx.fillStyle = '#ffffff'; ctx.fill();
-
-  if (full) { ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.clip(); }
-
-  ctx.strokeStyle = 'rgba(20,24,30,.6)';
-  ctx.lineWidth = Math.max(0.8, r * (full ? 0.075 : 0.1));
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    const a = UP + (i / 5) * TAU;
-    ctx.moveTo(x + Math.cos(a) * r * 0.30, y + Math.sin(a) * r * 0.30);
-    ctx.lineTo(x + Math.cos(a) * r * (full ? 1 : 0.76), y + Math.sin(a) * r * (full ? 1 : 0.76));
-  }
-  ctx.stroke();
-
-  if (full) {
-    ctx.fillStyle = ink;
-    for (let i = 0; i < 5; i++) {
-      const a = UP + Math.PI / 5 + (i / 5) * TAU;
-      pentagon(ctx, x + Math.cos(a) * r * 0.86, y + Math.sin(a) * r * 0.86, r * 0.25, a + Math.PI / 5);
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  ctx.fillStyle = ink;
-  pentagon(ctx, x, y, r * (full ? 0.30 : 0.36), UP);
-  ctx.fill();
-
-  ctx.beginPath(); ctx.arc(x, y, r, 0, TAU);
-  ctx.lineWidth = Math.max(1, r * 0.11);
-  ctx.strokeStyle = 'rgba(8,12,18,.72)';
-  ctx.stroke();
+  ctx.save();
+  // Blanco por si el visor no tiene fuente de emoji a color y cae al glifo
+  // monocromo: mejor un balon blanco sobre el cesped que uno verde oscuro.
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `${(r * 2.06).toFixed(2)}px ${EMOJI_FONT}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('\u26BD', x, y);
+  ctx.restore();
 }
 
 function coneGlyph(ctx, x, y, r, color) {

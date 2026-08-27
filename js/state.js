@@ -11,7 +11,10 @@ export const KINDS = {
   player:    { r: 1.0 },
   keeper:    { r: 1.0 },
   referee:   { r: 0.88 },
-  ball:      { r: 0.55 },
+  // El balon se dibuja mas grande de lo que es en la cancha a proposito: con la
+  // figura de cuero completa necesita sitio para leerse, y una pizarra sirve
+  // para ver la jugada, no para respetar los 22 cm del balon.
+  ball:      { r: 0.88 },
   cone:      { r: 0.5 },
   disc:      { r: 0.46 },
   mannequin: { r: 0.55 },

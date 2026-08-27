@@ -1,7 +1,11 @@
 // svg.js - a minimal Canvas2D-compatible recorder that emits SVG.
 // It lets the same drawing code produce a raster frame or a vector file.
 
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Tambien las comillas: van dentro de atributos. Sin esto, una familia de
+// fuente con comillas ("Apple Color Emoji") cerraba el atributo y rompia el SVG entero.
+const esc = (s) => String(s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const n = (v) => (Math.round(v * 100) / 100).toString();
 
 class Grad {

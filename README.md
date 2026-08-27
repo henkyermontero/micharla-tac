@@ -199,10 +199,17 @@ resto de la aplicación.
   `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es
   importado por `i18n.js` y `state.js` para que corra antes que cualquier
   lectura de `localStorage`.
-- El balón se dibuja en dos versiones a propósito. En su tamaño normal mide
-  unos 24 px en pantalla y ahí los cinco parches del borde más el contorno se
-  comen el blanco y queda un borrón oscuro; por debajo de 13 px de radio se
-  dibuja solo el pentágono y las costuras. Ver `ballGlyph` en `js/render.js`.
+- El balón es el emoji ⚽ dibujado como texto en el lienzo, no una figura hecha
+  a mano: cualquier cosa que dibujáramos sería una imitación peor de algo que el
+  sistema ya trae bien hecho. Sale de la fuente de emoji del dispositivo, así que
+  no se pide nada a la red, y se ve un poco distinto en Mac, Android y Windows.
+  Ver `ballGlyph` en `js/render.js`.
+- Por eso el balón se dibuja más grande de lo que es en la cancha (`KINDS.ball`
+  en `js/state.js`): una pizarra sirve para ver la jugada, no para respetar los
+  22 cm del balón.
+- El PNG y el video llevan el balón siempre, porque rasterizan. En el **SVG** va
+  como texto y depende de que quien lo abra tenga fuente de emoji; si no la
+  tiene, cae a un glifo blanco. Es el precio de usar el emoji de verdad.
 - `css/present.css` va después de `css/styles.css` a propósito: gana por orden,
   sin necesitar `!important`.
 - `sw.js` cachea la lista `ASSETS`. Si agregas un archivo al proyecto, agrégalo

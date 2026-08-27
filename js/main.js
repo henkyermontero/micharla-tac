@@ -58,10 +58,9 @@ const TOOLS = [
 const COLORS = ['#ffdd57', '#ffffff', '#39d98a', '#ff6b6b', '#4dabf7', '#ff922b', '#c77dff', '#0b0f14'];
 
 const GLYPHS = {
-  // Balon clasico: pentagono al centro y los cinco parches del borde, la misma
-  // figura que dibuja render.js en la cancha. Con radios en vez de parches se
-  // leia como un volante de auto; comparado en pantalla al tamano real.
-  ball: '<circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 9.05L14.81 11.09L13.73 14.39L10.27 14.39L9.19 11.09ZM17.25 6.56L16.6 8.55L14.51 8.55L13.86 6.56L15.56 5.33ZM18.8 15.31L16.71 15.31L16.06 13.32L17.75 12.09L19.45 13.32ZM10.95 19.49L10.31 17.5L12 16.27L13.69 17.5L13.05 19.49ZM4.55 13.32L6.25 12.09L7.94 13.32L7.29 15.31L5.2 15.31ZM8.44 5.33L10.14 6.56L9.49 8.55L7.4 8.55L6.75 6.56Z" fill="currentColor"/>',
+  // El mismo emoji que se dibuja en la cancha, para que la paleta muestre lo
+  // que vas a colocar. Es el unico icono a color y esta bien: es el balon.
+  ball: '<text x="12" y="12.6" font-size="19" text-anchor="middle" dominant-baseline="central" font-family="\'Apple Color Emoji\',\'Segoe UI Emoji\',\'Noto Color Emoji\',sans-serif">\u26BD</text>',
   cone: '<path d="M12 5l5 13H7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
   disc: '<ellipse cx="12" cy="13" rx="8" ry="4" fill="none" stroke="currentColor" stroke-width="1.8"/>',
   mannequin: '<circle cx="12" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 19l1.4-7h5.2L16 19z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
