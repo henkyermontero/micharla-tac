@@ -1,6 +1,6 @@
 // render.js - everything that paints onto the canvas.
 
-import { drawPitch, boxSize, THEMES, PITCHES, fromPitchFrac } from './pitch.js';
+import { drawPitch, boxSize, THEMES, PITCHES, GOALS, fromPitchFrac } from './pitch.js';
 import { state, KINDS, shapesOf, selection, frame } from './state.js';
 import { FORMATIONS } from './formations.js';
 
@@ -22,10 +22,15 @@ export function boardRect(cw, ch, pitchKey, pad) {
 export const toPx = (r, x, y) => [r.x + x * r.w, r.y + y * r.h];
 export const toBoard = (r, px, py) => [(px - r.x) / r.w, (py - r.y) / r.h];
 
+export const pxPerMeter = (rect) => rect.w / boxSize(state.doc.pitch).w;
+
 export function markerRadius(rect, kind = 'player', size = 1) {
   const spec = PITCHES[state.doc.pitch] || PITCHES.full;
-  const pxPerMeter = rect.w / boxSize(state.doc.pitch).w;
-  const base = pxPerMeter * spec.L * 0.021;
+  // Un arco mide lo que mide. No pasa por state.markerScale a proposito: subir
+  // el tamano de las fichas no puede agrandar una porteria de 7.32 m.
+  const goal = GOALS[kind];
+  if (goal) return pxPerMeter(rect) * (goal.w / 2) * size;
+  const base = pxPerMeter(rect) * spec.L * 0.021;
   return base * state.markerScale * size * (KINDS[kind] ? KINDS[kind].r : 1);
 }
 
@@ -298,15 +303,58 @@ function refereeGlyph(ctx, x, y, r) {
   ctx.fillText('A', x, y + r * 0.06);
 }
 
-function goalGlyph(ctx, x, y, r, color) {
-  ctx.strokeStyle = color || '#ffffff';
-  ctx.lineWidth = Math.max(2, r * 0.28);
-  ctx.strokeRect(x - r * 1.5, y - r * 0.6, r * 3, r * 1.2);
-  ctx.globalAlpha *= 0.35;
+/**
+ * Un arco visto desde arriba, con sus medidas reales en metros (ver GOALS en
+ * pitch.js), no con el radio de la ficha: en la pizarra ocupa lo mismo que
+ * ocupa en la cancha. La boca queda abierta y sin linea, con un poste marcado
+ * en cada esquina, para que se lea de un vistazo hacia donde se remata.
+ * Con rot 0 la boca mira a la izquierda, igual que el arco derecho del campo.
+ */
+function goalGlyph(ctx, x, y, rect, kind, size, color) {
+  const spec = GOALS[kind] || GOALS.minigoal;
+  const px = pxPerMeter(rect);
+  const w = spec.w * px * size;                    // boca
+  const d = Math.max(3, spec.d * px * size);       // fondo
+  const x0 = x - d / 2;
+  const y0 = y - w / 2;
+  const post = Math.max(1.6, Math.min(w * 0.05, d * 0.34));
+
+  // La red: un tinte y una cuadricula floja. Cuadricula y no rayas paralelas
+  // porque las rayas, a este tamano, se leen como una escalera de coordinacion.
+  ctx.save();
   ctx.beginPath();
-  for (let i = -3; i <= 3; i++) { ctx.moveTo(x + i * r * 0.5, y - r * 0.6); ctx.lineTo(x + i * r * 0.5, y + r * 0.6); }
-  ctx.lineWidth = Math.max(1, r * 0.1);
+  ctx.rect(x0, y0, d, w);
+  ctx.fillStyle = 'rgba(255,255,255,.13)';
+  ctx.fill();
+  ctx.clip();
+  ctx.globalAlpha *= 0.4;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = Math.max(0.5, post * 0.22);
+  const cell = Math.max(4, w / 6);
+  ctx.beginPath();
+  for (let ny = y0 + cell; ny < y0 + w - 1; ny += cell) { ctx.moveTo(x0, ny); ctx.lineTo(x0 + d, ny); }
+  for (let nx = x0 + cell; nx < x0 + d - 1; nx += cell) { ctx.moveTo(nx, y0); ctx.lineTo(nx, y0 + w); }
   ctx.stroke();
+  ctx.restore();
+
+  // los tres lados cerrados: la boca se deja abierta
+  ctx.strokeStyle = color;
+  ctx.lineWidth = Math.max(1, post * 0.6);
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x0 + d, y0);
+  ctx.lineTo(x0 + d, y0 + w);
+  ctx.lineTo(x0, y0 + w);
+  ctx.stroke();
+
+  // los postes, gordos a proposito: son lo que dice hacia donde se remata
+  ctx.fillStyle = color;
+  for (const ny of [y0, y0 + w]) {
+    ctx.beginPath();
+    ctx.arc(x0, ny, post * 1.15, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
 
 function flagGlyph(ctx, x, y, r, color) {
@@ -351,7 +399,8 @@ export function drawObject(ctx, rect, o, p, opts = {}) {
     case 'disc': discGlyph(ctx, x, y, r, o.color || '#ffd166'); break;
     case 'mannequin': mannequinGlyph(ctx, x, y, r, o.color || '#cbd5e1'); break;
     case 'referee': refereeGlyph(ctx, x, y, r); break;
-    case 'minigoal': goalGlyph(ctx, x, y, r, o.color || '#ffffff'); break;
+    case 'goal':
+    case 'minigoal': goalGlyph(ctx, x, y, rect, o.kind, o.size || 1, o.color || '#ffffff'); break;
     case 'flag': flagGlyph(ctx, x, y, r, o.color || '#ffd166'); break;
     case 'ladder': ladderGlyph(ctx, x, y, r, o.color || '#ffd166'); break;
     case 'hurdle': hurdleGlyph(ctx, x, y, r, o.color || '#f4a261'); break;
@@ -609,7 +658,7 @@ export function paint(ctx, canvasW, canvasH, opts = {}) {
   const pos = playing ? positionsAt(doc, index, t) : frame(index).pos;
   if (!doc.objects.length && !playing && opts.ghost !== false) drawGhostFormation(ctx, rect);
 
-  const order = ['ladder', 'hurdle', 'minigoal', 'disc', 'cone', 'flag', 'mannequin', 'label', 'referee', 'player', 'keeper', 'ball'];
+  const order = ['ladder', 'hurdle', 'goal', 'minigoal', 'disc', 'cone', 'flag', 'mannequin', 'label', 'referee', 'player', 'keeper', 'ball'];
   const sorted = doc.objects.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   for (const o of sorted) drawObject(ctx, rect, o, pos[o.id]);
 

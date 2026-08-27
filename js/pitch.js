@@ -14,6 +14,19 @@ export const PITCHES = {
   blank:    { label: 'Blank board',      sport: 'blank',     L: 60,  W: 40,  clip: [0, 0, 60, 40],    portrait: false },
 };
 
+/**
+ * Arcos en metros de verdad, para diseñar sesiones con medidas que existen.
+ * El reglamentario mide 7.32 m de boca (regla 1 de la IFAB) y se le da 1.9 m de
+ * fondo, la misma medida con la que el campo pinta los suyos. El de
+ * entrenamiento es el que se carga en el carro: 3 m de boca y 1 m de fondo.
+ * Con el deslizador de tamaño (50 - 200%) un arco de 3 m cubre desde 1.5 m
+ * hasta 6 m, que es todo el rango de arcos portátiles que se usan.
+ */
+export const GOALS = {
+  goal:     { w: 7.32, d: 1.9 },
+  minigoal: { w: 3,    d: 1 },
+};
+
 export const THEMES = {
   grass:  { turf: '#2c7a4b', stripe: '#318653', line: 'rgba(255,255,255,0.88)', out: '#1d5334' },
   night:  { turf: '#141a22', stripe: '#171f28', line: 'rgba(150,225,190,0.55)', out: '#0d1117' },

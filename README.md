@@ -44,8 +44,16 @@ Medidas reglamentarias en metros (105 x 68 y las marcas oficiales del campo).
 
 **Fichas** Dos equipos con nombre, color, número y nombre de jugador editables.
 Formaciones por tamaño de equipo: 11 (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2 y más),
-9, 7 y futsal. Material: balón, conos, platos, maniquíes, mini arcos, picas,
-escaleras, vallas, árbitro y textos.
+9, 7 y futsal. Material: balón, conos, platos, maniquíes, picas, escaleras,
+vallas, árbitro y textos.
+
+**Arcos** Dos, y los dos miden lo que miden en la cancha: el reglamentario de
+7.32 m de boca (regla 1 de la IFAB) y el de entrenamiento de 3 m. Se ven desde
+arriba con la boca abierta y los dos postes marcados, así que se lee de un
+vistazo hacia dónde se remata, y giran a cualquier ángulo. El deslizador de
+tamaño (50 - 200%) lleva el pequeño de 1.5 m a 6 m, que es todo el rango de
+arcos portátiles que existen. No pasan por el tamaño global de fichas a
+propósito: agrandar las fichas no puede agrandar una portería.
 
 La paleta flotante coloca fichas en cadena: eliges una, tocas el campo las veces
 que haga falta y sales con `Esc`. Los números se autoincrementan por equipo.
@@ -126,7 +134,7 @@ dibujo, DOM para los paneles.
 
 | Archivo | Responsabilidad |
 | --- | --- |
-| `js/pitch.js` | Medidas del campo en metros, proyección y todas las marcas |
+| `js/pitch.js` | Medidas del campo y de los arcos en metros, proyección y marcas |
 | `js/view.js` | Zoom, paneo e imán a los puntos del campo |
 | `js/state.js` | Documento, cuadros, selección, historial y guardado |
 | `js/render.js` | Pintado: fichas, dibujos, interpolación, ayudas visuales |
@@ -180,7 +188,9 @@ resto de la aplicación.
 - Safari graba MP4 pero versiones viejas no graban nada; ahí quedan la imagen y
   el guion imprimible.
 - Los archivos `.tboard.json` y `.pitchlab.json` de versiones anteriores se
-  abren sin problema: el lector nunca miró el nombre, solo el contenido.
+  abren sin problema: el lector nunca miró el nombre, solo el contenido. Los
+  `minigoal` guardados antes siguen abriendo; ahora se dibujan con sus 3 m
+  reales en vez del tamaño arbitrario que tenían.
 - Las pizarras guardadas antes de los dos cambios de nombre se migran solas la
   primera vez que abres esta versión: `tacticalboard.*` y `pitchlab.*` pasan a
   `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es

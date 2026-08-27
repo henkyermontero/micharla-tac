@@ -22,7 +22,7 @@ function dist2seg(px, py, a, b) {
 
 export function hitObject(rect, bx, by) {
   const f = frame();
-  const order = ['ball', 'player', 'keeper', 'referee', 'label', 'mannequin', 'flag', 'disc', 'cone', 'minigoal', 'hurdle', 'ladder'];
+  const order = ['ball', 'player', 'keeper', 'referee', 'label', 'mannequin', 'flag', 'disc', 'cone', 'minigoal', 'goal', 'hurdle', 'ladder'];
   const list = state.doc.objects.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   const [mx, my] = toPx(rect, bx, by);
   for (const o of list) {

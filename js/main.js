@@ -62,7 +62,8 @@ const GLYPHS = {
   cone: '<path d="M12 5l5 13H7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
   disc: '<ellipse cx="12" cy="13" rx="8" ry="4" fill="none" stroke="currentColor" stroke-width="1.8"/>',
   mannequin: '<circle cx="12" cy="7" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 19l1.4-7h5.2L16 19z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
-  minigoal: '<rect x="3.5" y="8" width="17" height="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 8v8M12 8v8M16 8v8" stroke="currentColor" stroke-width="1.1"/>',
+  goal: '<path d="M2.5 18.5V7.5h19v11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M7.3 7.5v11M12 7.5v11M16.7 7.5v11M2.5 11.2h19M2.5 14.9h19" stroke="currentColor" stroke-width=".9" opacity=".5"/>',
+  minigoal: '<path d="M6.5 18.5v-7h11v7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M10.2 11.5v7M13.8 11.5v7M6.5 15h11" stroke="currentColor" stroke-width=".9" opacity=".5"/>',
   flag: '<path d="M7 20V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 4l9 3.2L7 10.6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
   ladder: '<rect x="3" y="8" width="18" height="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 8v8M12 8v8M16 8v8" stroke="currentColor" stroke-width="1.3"/>',
   hurdle: '<path d="M6 19V8h12v11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
@@ -80,6 +81,7 @@ const PALETTE = [
   { id: 'cone', kind: 'cone', label: 'kinds.cone' },
   { id: 'disc', kind: 'disc', label: 'kinds.disc' },
   { id: 'mannequin', kind: 'mannequin', label: 'kinds.mannequin' },
+  { id: 'goal', kind: 'goal', label: 'kinds.goal' },
   { id: 'minigoal', kind: 'minigoal', label: 'kinds.minigoal' },
   { id: 'flag', kind: 'flag', label: 'kinds.flag' },
   { id: 'referee', kind: 'referee', label: 'kinds.referee' },
@@ -87,7 +89,7 @@ const PALETTE = [
   { id: 'label', kind: 'label', label: 'kinds.label', tool: 'text' },
 ];
 
-const EQUIPMENT = ['ball', 'cone', 'disc', 'mannequin', 'minigoal', 'flag', 'ladder', 'hurdle', 'referee', 'label'];
+const EQUIPMENT = ['ball', 'cone', 'disc', 'mannequin', 'goal', 'minigoal', 'flag', 'ladder', 'hurdle', 'referee', 'label'];
 
 /* ================= small helpers ================= */
 

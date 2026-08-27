@@ -25,7 +25,8 @@ const DICT = {
     },
     kinds: {
       player: 'Jugador', keeper: 'Portero', ball: 'Balón', cone: 'Cono', disc: 'Plato',
-      mannequin: 'Maniquí', minigoal: 'Mini arco', flag: 'Pica', ladder: 'Escalera',
+      mannequin: 'Maniquí', goal: 'Arco reglamentario', minigoal: 'Arco pequeño',
+      flag: 'Pica', ladder: 'Escalera',
       hurdle: 'Valla', referee: 'Árbitro', label: 'Texto',
     },
     sel: {
@@ -152,7 +153,8 @@ const DICT = {
     },
     kinds: {
       player: 'Player', keeper: 'Goalkeeper', ball: 'Ball', cone: 'Cone', disc: 'Disc',
-      mannequin: 'Mannequin', minigoal: 'Mini goal', flag: 'Pole', ladder: 'Ladder',
+      mannequin: 'Mannequin', goal: 'Full-size goal', minigoal: 'Small goal',
+      flag: 'Pole', ladder: 'Ladder',
       hurdle: 'Hurdle', referee: 'Referee', label: 'Text',
     },
     sel: {
