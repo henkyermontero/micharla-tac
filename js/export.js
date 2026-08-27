@@ -1,4 +1,7 @@
-// export.js - PNG, SVG, printable playbook, video, play files and share links.
+// export.js - PNG, SVG, printable playbook, video and share links.
+//
+// No hay descarga ni apertura de archivos de jugada a proposito: la jugada sale
+// de aqui como imagen, guion, video o enlace, nunca como el documento crudo.
 
 import { state, loadDoc, selection } from './state.js';
 import { paint, boardRect } from './render.js';
@@ -233,29 +236,6 @@ export function thumbnail(width = 320) {
   paint(opaque(c), c.width, c.height, { rect: boardRect(c.width, c.height, state.doc.pitch, 2), ghost: false });
   state.selection = keep;
   try { return c.toDataURL('image/jpeg', 0.6); } catch { return null; }
-}
-
-/* ---------------- files ---------------- */
-
-export function exportJSON() {
-  const blob = new Blob([JSON.stringify(state.doc, null, 2)], { type: 'application/json' });
-  download(blob, `${fileBase()}.micharlatac.json`);
-}
-
-export function importJSON(file) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onload = () => {
-      try {
-        const doc = JSON.parse(fr.result);
-        if (!doc.frames) throw new Error('bad file');
-        loadDoc(doc);
-        resolve(doc);
-      } catch (e) { reject(e); }
-    };
-    fr.onerror = reject;
-    fr.readAsText(file);
-  });
 }
 
 /* ---------------- share links ---------------- */

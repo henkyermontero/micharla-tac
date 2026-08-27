@@ -13,7 +13,6 @@ const DICT = {
     menu: {
       png: 'Imagen de este cuadro (PNG)', sheet: 'Guion imprimible (todos los cuadros)',
       video: 'Video de la animación', svg: 'Vector de este cuadro (SVG)',
-      json: 'Descargar archivo de la jugada', import: 'Abrir archivo de jugada...',
       save: 'Guardar en este navegador', library: 'Mis pizarras', share: 'Copiar enlace',
       help: 'Atajos y ayuda', exportAll: 'Exportar...',
     },
@@ -87,9 +86,9 @@ const DICT = {
     toast: {
       saved: 'Guardado en este navegador', linkCopied: 'Enlace copiado',
       linkBar: 'El enlace está en la barra de direcciones',
-      linkFail: 'No se pudo crear el enlace', tooBig: 'La jugada es muy grande para un enlace, usa el archivo',
+      linkFail: 'No se pudo crear el enlace', tooBig: 'La jugada es muy grande para un enlace, guárdala en este navegador',
       png: 'Imagen descargada', sheet: 'Guion descargado', svg: 'SVG descargado',
-      json: 'Archivo descargado', loaded: 'Jugada cargada', badFile: 'No se pudo leer ese archivo',
+      loaded: 'Jugada cargada',
       recording: 'Grabando la animación...', video: 'Video descargado',
       needFrames: 'Agrega al menos dos cuadros para grabar', duplicated: 'Ficha duplicada',
       copied: 'Copiado', deleted: 'Eliminado',
@@ -141,7 +140,6 @@ const DICT = {
     menu: {
       png: 'Image of this frame (PNG)', sheet: 'Printable playbook (all frames)',
       video: 'Animation video', svg: 'Vector of this frame (SVG)',
-      json: 'Download play file', import: 'Open play file...',
       save: 'Save to this browser', library: 'My boards', share: 'Copy link',
       help: 'Shortcuts and help', exportAll: 'Export...',
     },
@@ -208,9 +206,9 @@ const DICT = {
     present: { open: 'Presentation mode', exit: 'Leave presentation' },
     toast: {
       saved: 'Saved to this browser', linkCopied: 'Link copied', linkBar: 'The link is in the address bar',
-      linkFail: 'Could not create the link', tooBig: 'Play too big for a link, use the file export',
+      linkFail: 'Could not create the link', tooBig: 'Play too big for a link, save it to this browser instead',
       png: 'Image downloaded', sheet: 'Playbook downloaded', svg: 'SVG downloaded',
-      json: 'File downloaded', loaded: 'Play loaded', badFile: 'That file could not be read',
+      loaded: 'Play loaded',
       recording: 'Recording the animation...', video: 'Video downloaded',
       needFrames: 'Add at least two frames to record', duplicated: 'Token duplicated',
       copied: 'Copied', deleted: 'Deleted',

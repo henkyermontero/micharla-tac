@@ -85,8 +85,11 @@ encendida con Wake Lock donde existe; donde no, el modo funciona igual.
 - Guion imprimible con todos los cuadros, su fase y su nota
 - Video de la animación en MP4 donde el navegador lo permite (Chrome, Edge,
   Safari recientes) y WebM en el resto
-- Archivo `.micharlatac.json` para guardar y reabrir
 - Enlace: la jugada entera viaja comprimida en la URL, no se sube nada
+
+La jugada **no sale como archivo**. Sale como imagen, guion, video o enlace, y
+se guarda en el navegador. Es una decisión, no algo pendiente: la pizarra no
+entrega el documento crudo.
 
 **Guardado** Autoguardado local en cada cambio, biblioteca de pizarras en el
 navegador con miniatura, búsqueda y duplicado. Todo vive en `localStorage`.
@@ -187,10 +190,10 @@ resto de la aplicación.
 
 - Safari graba MP4 pero versiones viejas no graban nada; ahí quedan la imagen y
   el guion imprimible.
-- Los archivos `.tboard.json` y `.pitchlab.json` de versiones anteriores se
-  abren sin problema: el lector nunca miró el nombre, solo el contenido. Los
-  `minigoal` guardados antes siguen abriendo; ahora se dibujan con sus 3 m
-  reales en vez del tamaño arbitrario que tenían.
+- Ya no se abren archivos de jugada. Las pizarras guardadas en el navegador y
+  los enlaces compartidos siguen funcionando igual, y los `minigoal` guardados
+  antes ahora se dibujan con sus 3 m reales en vez del tamaño arbitrario que
+  tenían.
 - Las pizarras guardadas antes de los dos cambios de nombre se migran solas la
   primera vez que abres esta versión: `tacticalboard.*` y `pitchlab.*` pasan a
   `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es

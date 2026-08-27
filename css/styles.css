@@ -119,6 +119,9 @@ kbd{
 .menu hr{border:0;border-top:1px solid var(--line);margin:5px 4px}
 .only-mobile{display:none}
 .m-only,.m-only-inline{display:none}
+/* .menu button gana en especificidad a .m-only, asi que en escritorio estos
+   cuatro se colaban en el menu duplicando los botones de la barra de arriba. */
+.menu button.m-only{display:none}
 
 /* ---------- workspace ---------- */
 .workspace{display:grid;grid-template-columns:var(--rail) 1fr var(--panel-w);min-height:0;min-width:0}
@@ -301,6 +304,7 @@ input[type=range]{accent-color:var(--accent);width:100%}
   .brand svg{width:22px;height:22px}
   #btn-open,#btn-save,#btn-share,#btn-help{display:none}
   .m-only{display:block}
+  .menu button.m-only{display:block}
   .m-only-inline{display:inline}
   .wide-only{display:none}
   .topbar{gap:6px;padding:0 8px}

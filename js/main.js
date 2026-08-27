@@ -17,7 +17,7 @@ import { view, applyView, resetView, zoomAt, clampPan, MIN_SCALE, MAX_SCALE } fr
 import { play, stop, toggle, totalDuration } from './animate.js';
 import { attachPresent } from './present.js';
 import {
-  exportPNG, exportSVG, exportSheet, exportVideo, exportJSON, importJSON,
+  exportPNG, exportSVG, exportSheet, exportVideo,
   shareLink, readShareLink, thumbnail, videoFormat,
 } from './export.js';
 
@@ -884,20 +884,10 @@ function wire() {
     menu.hidden = true;
     if (act === 'present') present.set(true);
     if (act === 'export') openExport();
-    if (act === 'json') { exportJSON(); toast(t('toast.json')); }
-    if (act === 'import') $('#file-input').click();
     if (act === 'save') doSave();
     if (act === 'library') openLibrary();
     if (act === 'share') doShare();
     if (act === 'help') $('#help-dlg').showModal();
-  };
-
-  $('#file-input').onchange = async (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    try { await importJSON(f); afterLoad(); toast(t('toast.loaded')); }
-    catch { toast(t('toast.badFile'), true); }
-    e.target.value = '';
   };
 
   $$('.tab').forEach((tab) => {
