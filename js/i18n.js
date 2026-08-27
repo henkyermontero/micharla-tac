@@ -82,6 +82,7 @@ const DICT = {
       playing: 'Reproduciendo', total: 'Total',
     },
     zoom: { in: 'Acercar', out: 'Alejar', fit: 'Ajustar', reset: 'Ajustar a la pantalla' },
+    present: { open: 'Modo presentación', exit: 'Salir de presentación' },
     toast: {
       saved: 'Guardado en este navegador', linkCopied: 'Enlace copiado',
       linkBar: 'El enlace está en la barra de direcciones',
@@ -126,6 +127,7 @@ const DICT = {
       del: 'Eliminar la selección', allFrames: 'Mover en todos los cuadros',
       straight: 'Línea recta', save: 'Guardar', undo: 'Deshacer (con Shift, rehacer)',
       dup: 'Duplicar', zoom: 'Acercar / alejar', pan: 'Mover la vista', esc: 'Salir del modo colocar',
+      present: 'Modo presentación (Esc para salir)',
     },
   },
   en: {
@@ -201,6 +203,7 @@ const DICT = {
       speed: 'Speed', add: '+ Frame', frame: 'Frame', of: 'of', playing: 'Playing', total: 'Total',
     },
     zoom: { in: 'Zoom in', out: 'Zoom out', fit: 'Fit', reset: 'Fit to screen' },
+    present: { open: 'Presentation mode', exit: 'Leave presentation' },
     toast: {
       saved: 'Saved to this browser', linkCopied: 'Link copied', linkBar: 'The link is in the address bar',
       linkFail: 'Could not create the link', tooBig: 'Play too big for a link, use the file export',
@@ -239,6 +242,7 @@ const DICT = {
       nudge: 'Nudge the selection', del: 'Delete the selection', allFrames: 'Move on every frame',
       straight: 'Straight line', save: 'Save', undo: 'Undo (with Shift, redo)', dup: 'Duplicate',
       zoom: 'Zoom in / out', pan: 'Pan the view', esc: 'Leave placing mode',
+      present: 'Presentation mode (Esc to leave)',
     },
   },
 };

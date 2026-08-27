@@ -15,6 +15,7 @@ import { paint, boardRect, markerRadius } from './render.js';
 import { attach, isDrawTool } from './interact.js';
 import { view, applyView, resetView, zoomAt, clampPan, MIN_SCALE, MAX_SCALE } from './view.js';
 import { play, stop, toggle, totalDuration } from './animate.js';
+import { attachPresent } from './present.js';
 import {
   exportPNG, exportSVG, exportSheet, exportVideo, exportJSON, importJSON,
   shareLink, readShareLink, thumbnail, videoFormat,
@@ -33,6 +34,7 @@ let draft = null;
 let draftOpen = false;
 let marquee = null;
 let emptyDismissed = false;
+let present = null;   // se crea en wire(); computeRects y render lo consultan antes
 
 /* ================= tool + palette definitions ================= */
 
@@ -136,8 +138,18 @@ function askText(initial = '') {
 
 function computeRects() {
   // Leave room for the floating token palette so the pitch never sits under it.
-  const reserve = stage.clientWidth > 860 ? 58 : 48;
-  base = boardRect(stage.clientWidth, stage.clientHeight - reserve, state.doc.pitch);
+  // Presenting there is no palette: the phase caption takes room above and the
+  // control bar below, so the pitch is centred in what is left between them.
+  const ins = present?.insets();
+  if (ins) {
+    // Presenting, nothing else is on the screen, so the pitch runs almost to the
+    // edges: the usual 5% margin is there to breathe next to the panels.
+    base = boardRect(stage.clientWidth, stage.clientHeight - ins.top - ins.bottom, state.doc.pitch, 10);
+    base.y += ins.top;
+  } else {
+    const reserve = stage.clientWidth > 860 ? 58 : 48;
+    base = boardRect(stage.clientWidth, stage.clientHeight - reserve, state.doc.pitch);
+  }
   rect = applyView(base);
 }
 
@@ -181,6 +193,7 @@ function render() {
     ? `${t('time.playing')} ${state.frame + 1}/${n}`
     : `${t('time.frame')} ${state.frame + 1} ${t('time.of')} ${n}`;
   $('#empty-card').hidden = emptyDismissed || state.doc.objects.length > 0 || state.playing;
+  present?.refresh();   // barato: solo toca el DOM si la fase o el cuadro cambiaron
 }
 
 function viewChanged() {
@@ -832,6 +845,8 @@ function syncBoardPane() {
 /* ================= wiring ================= */
 
 function wire() {
+  present = attachPresent({ playToggle, gotoFrame, resize });
+
   buildRail();
   buildPalette();
   buildEquipment();
@@ -845,6 +860,7 @@ function wire() {
   $('#btn-save').onclick = doSave;
   $('#btn-share').onclick = doShare;
   $('#btn-help').onclick = () => $('#help-dlg').showModal();
+  $('#btn-present').onclick = () => present.set(true);
   $('#btn-panel').onclick = () => $('#panel').classList.toggle('open');
   $('#mode-edit').onclick = () => setAnimateMode(false);
   $('#mode-anim').onclick = () => setAnimateMode(true);
@@ -861,6 +877,7 @@ function wire() {
     const act = e.target.dataset.act;
     if (!act) return;
     menu.hidden = true;
+    if (act === 'present') present.set(true);
     if (act === 'export') openExport();
     if (act === 'json') { exportJSON(); toast(t('toast.json')); }
     if (act === 'import') $('#file-input').click();
@@ -956,12 +973,23 @@ function wire() {
   $('#t-play').onclick = playToggle;
   $('#t-prev').onclick = () => gotoFrame(state.frame - 1);
   $('#t-next').onclick = () => gotoFrame(state.frame + 1);
-  $('#t-loop').onclick = () => {
-    state.loop = !state.loop;
-    $('#t-loop').classList.toggle('on', state.loop);
-    $('#t-loop').setAttribute('aria-pressed', state.loop ? 'true' : 'false');
+  // Un solo estado de repeticion, dos botones que lo muestran: el de la linea de
+  // tiempo y el de la barra de presentacion.
+  const syncLoop = () => {
+    for (const el of [$('#t-loop'), $('#p-loop')]) {
+      el.classList.toggle('on', state.loop);
+      el.setAttribute('aria-pressed', state.loop ? 'true' : 'false');
+    }
   };
-  $('#t-loop').classList.toggle('on', state.loop);
+  const toggleLoop = () => { state.loop = !state.loop; syncLoop(); };
+  $('#t-loop').onclick = toggleLoop;
+  $('#p-loop').onclick = toggleLoop;
+  syncLoop();
+
+  $('#p-play').onclick = () => { playToggle(); present.refresh(); };
+  $('#p-prev').onclick = () => { gotoFrame(state.frame - 1); present.refresh(); };
+  $('#p-next').onclick = () => { gotoFrame(state.frame + 1); present.refresh(); };
+  $('#p-exit').onclick = () => present.set(false);
   $('#speed').onchange = (e) => { state.speed = parseFloat(e.target.value); };
   $('#add-frame').onclick = () => { edit(() => addFrame()); refreshAll(); };
 
@@ -1005,6 +1033,15 @@ function onKey(e) {
   const tag = (e.target.tagName || '').toLowerCase();
   if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
   const mod = e.metaKey || e.ctrlKey;
+
+  // Presentando no se edita. present.key() se queda con todo para que ninguna
+  // tecla suelta borre una ficha delante de los jugadores.
+  if (present.key(e)) return;
+  // No entrar a presentar por encima de un dialogo abierto: quedaria debajo.
+  if (!mod && e.key.toLowerCase() === 'm' && !document.querySelector('dialog[open]')) {
+    present.set(true);
+    return;
+  }
 
   if (mod && e.key.toLowerCase() === 'z') {
     e.preventDefault();

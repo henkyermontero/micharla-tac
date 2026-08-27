@@ -2,13 +2,13 @@
 //
 // Bump CACHE on every release that changes a file below. The name is the only
 // thing that evicts the old copy.
-const CACHE = 'micharlatac-v3';
+const CACHE = 'micharlatac-v4';
 const ASSETS = [
-  './', './index.html', './css/styles.css', './manifest.webmanifest',
+  './', './index.html', './css/styles.css', './css/present.css', './manifest.webmanifest',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png',
   './js/main.js', './js/state.js', './js/render.js', './js/pitch.js', './js/view.js',
   './js/interact.js', './js/animate.js', './js/export.js', './js/formations.js',
-  './js/i18n.js', './js/svg.js', './js/legacy.js',
+  './js/i18n.js', './js/svg.js', './js/legacy.js', './js/present.js',
   './fonts/inter-latin.woff2', './fonts/inter-latin-ext.woff2',
 ];
 

@@ -10,6 +10,7 @@
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
 <link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/present.css" />
 </head>
 <body>
 <div class="app" id="app">
@@ -48,6 +49,8 @@
           <svg class="caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
         <div class="menu" id="menu" hidden>
+          <button data-act="present" data-i18n="present.open"></button>
+          <hr />
           <button data-act="export" data-i18n="menu.exportAll"></button>
           <hr />
           <button data-act="json" data-i18n="menu.json"></button>
@@ -64,6 +67,9 @@
 
       <select id="lang" class="lang" data-i18n-title="board.language"></select>
 
+      <button class="icon-btn" id="btn-present" data-i18n-title="present.open">
+        <svg viewBox="0 0 24 24"><path d="M3 4.5h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 20.5L12 17l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 8.4l4.6 2.1L10 12.6z" fill="currentColor"/></svg>
+      </button>
       <button class="icon-btn wide-only" id="btn-help" data-i18n-title="top.help">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.7-.9 1.4v.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.05" fill="currentColor"/></svg>
       </button>
@@ -240,6 +246,36 @@
   </footer>
 
   <div class="toast" id="toast" hidden></div>
+
+  <!-- Modo presentacion: se monta encima de todo. El atrapador cubre el lienzo
+       para que en la cancha un roce no dibuje sobre la jugada. -->
+  <div class="present-ui" id="present-ui" hidden>
+    <div class="present-catch" id="present-catch"></div>
+
+    <div class="present-head" id="present-head">
+      <div class="present-phase" id="present-phase"></div>
+      <div class="present-note" id="present-note" hidden></div>
+    </div>
+
+    <div class="present-bar" id="present-bar">
+      <button class="pbtn" id="p-prev" data-i18n-title="time.prev">
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7M7 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="pbtn play" id="p-play" data-i18n-title="time.play">
+        <svg viewBox="0 0 24 24" id="p-play-icon"><path d="M8 5.5l11 6.5-11 6.5z" fill="currentColor"/></svg>
+      </button>
+      <button class="pbtn" id="p-next" data-i18n-title="time.next">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7M17 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="present-count" id="present-count"></span>
+      <button class="pbtn" id="p-loop" data-i18n-title="time.loop">
+        <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 8-8h5m0 0l-2.5-2.5M17 4l-2.5 2.5M20 12a8 8 0 0 1-8 8H7m0 0l2.5 2.5M7 20l2.5-2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="pbtn exit" id="p-exit" data-i18n-title="present.exit">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
 
 <dialog id="welcome-dlg" class="dlg">
@@ -285,6 +321,7 @@
         <li><kbd>Cmd</kbd>+<kbd>Z</kbd> <span data-i18n="keys.undo"></span></li>
         <li><kbd>Scroll</kbd> <span data-i18n="keys.zoom"></span></li>
         <li><kbd>Space</kbd>+drag <span data-i18n="keys.pan"></span></li>
+        <li><kbd>M</kbd> <span data-i18n="keys.present"></span></li>
       </ul>
     </div>
   </div>

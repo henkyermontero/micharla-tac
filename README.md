@@ -61,6 +61,16 @@ pizarra interpola el movimiento. Fase con nombre ("Salida", "Disparador",
 previsualización punteada de a dónde va cada ficha, velocidad 0.25x a 2x y
 repetición. Las flechas de un cuadro se van trazando mientras ese paso corre.
 
+**Presentación** Un botón (o la tecla `M`) deja la pizarra sola a pantalla
+completa: se van la barra, el riel, el panel y la línea de tiempo, y quedan la
+fase del cuadro en grande, la nota del entrenador debajo y cuatro botones del
+tamaño de un dedo que se apartan solos a los pocos segundos y vuelven con
+cualquier toque. Deslizar cambia de cuadro. Presentando **no se dibuja**: un
+atrapador cubre el lienzo y las teclas de edición se ignoran, así que un roce en
+la tablet parado en la cancha no borra una ficha delante de los jugadores.
+Pide pantalla completa donde el navegador la da y mantiene la pantalla
+encendida con Wake Lock donde existe; donde no, el modo funciona igual.
+
 **Exportar**
 - PNG del cuadro actual a 1x, 2x o 3x
 - SVG vectorial del cuadro actual
@@ -106,6 +116,7 @@ teléfonos quedan fuera de ese ensanchamiento por debajo de 700px.
 | `Cmd/Ctrl` + `Z` | Deshacer (con Shift, rehacer) |
 | Rueda | Acercar y alejar hacia el cursor |
 | `Espacio` + arrastrar | Mover la vista |
+| `M` | Modo presentación (`Esc` para salir) |
 | Dos dedos | Pellizcar para acercar, arrastrar para mover |
 
 ## Cómo está hecho
@@ -123,10 +134,11 @@ dibujo, DOM para los paneles.
 | `js/animate.js` | Reloj de reproducción |
 | `js/export.js` | PNG, SVG, guion, video, archivos y enlaces |
 | `js/svg.js` | Grabador con la misma API que Canvas 2D que emite SVG |
+| `js/present.js` | Modo presentación: pantalla completa, gestos, Wake Lock |
 | `js/i18n.js` | Diccionarios es / en |
 | `js/main.js` | Cableado de la interfaz |
 
-Dos decisiones que vale la pena conocer:
+Tres decisiones que vale la pena conocer:
 
 1. **Las posiciones se guardan como fracción del campo visible** y se convierten
    a fracción del campo real cuando cambias de vista. Por eso pasar de horizontal
@@ -135,6 +147,13 @@ Dos decisiones que vale la pena conocer:
 2. **`js/svg.js` implementa la misma API que el contexto 2D del canvas**, así que
    el mismo código de dibujo produce el PNG y el SVG. No hay dos renderizadores
    que mantener.
+3. **El campo se mide contra los elementos, no contra números fijos.** En modo
+   presentación `computeRects` le pregunta a `present.insets()` cuánto ocupan el
+   cartel de fase y la barra de controles y centra la cancha en lo que sobra. El
+   cartel tiene alto fijo a propósito: si creciera con el texto, el campo saltaría
+   de tamaño al pasar de un cuadro con nota a uno sin ella. Y las medidas salen de
+   `offsetTop` / `offsetHeight`, no de `getBoundingClientRect`, porque la barra se
+   aparta con un `transform` y el campo saltaría cada vez que lo hace.
 
 ## Rutas
 
@@ -167,6 +186,8 @@ resto de la aplicación.
   `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es
   importado por `i18n.js` y `state.js` para que corra antes que cualquier
   lectura de `localStorage`.
+- `css/present.css` va después de `css/styles.css` a propósito: gana por orden,
+  sin necesitar `!important`.
 - `sw.js` cachea la lista `ASSETS`. Si agregas un archivo al proyecto, agrégalo
   ahí y sube `CACHE` a la versión siguiente, o la app se rompe sin conexión.
 

@@ -1,0 +1,150 @@
+/* ============ modo presentacion ============
+   La pizarra sola, para mostrarla en una tablet o un televisor parado en la
+   cancha. Todo lo de editar se va, el campo ocupa la pantalla entera y quedan
+   cuatro botones grandes que se apartan solos cuando nadie toca nada.
+   Este archivo va ultimo a proposito: gana sin necesitar !important. */
+
+.app.present{grid-template-rows:1fr}
+.app.present .workspace{grid-template-columns:1fr}
+.app.present .topbar,
+.app.present .rail,
+.app.present .panel,
+.app.present .timeline,
+.app.present .palette,
+.app.present .zoomer,
+.app.present .status,
+.app.present .stage-hint,
+.app.present .stage-badge,
+.app.present .empty-card,
+.app.present .coach{display:none}
+.app.present .stage{background:radial-gradient(120% 90% at 50% 0%,#101822,#05080c)}
+
+.present-ui{
+  position:fixed;inset:0;z-index:70;
+  display:grid;grid-template-rows:auto 1fr auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
+  pointer-events:none;
+}
+.present-ui[hidden]{display:none}
+
+/* Cubre el lienzo entero: presentando, la pizarra se mira, no se dibuja. */
+.present-catch{
+  position:absolute;inset:0;pointer-events:auto;touch-action:none;
+  background:transparent;cursor:default;
+}
+
+/* ---------- fase y nota ----------
+   Alto fijo a proposito. Si el cartel creciera con el texto, el campo saltaria
+   de tamano al pasar de un cuadro con nota a uno sin ella. Cabe el titulo en
+   una linea y la nota en dos; lo que sobre se corta. */
+.present-head{
+  grid-row:1;justify-self:center;text-align:center;max-width:min(1100px,90vw);
+  --ph:clamp(20px,3.4vw,42px);
+  --nt:clamp(13px,1.5vw,20px);
+  height:calc(var(--ph) * 1.15 + var(--nt) * 2.7 + 10px);
+  overflow:hidden;
+  pointer-events:none;transition:opacity .3s ease;
+}
+.present-phase{
+  font-size:var(--ph);font-weight:800;letter-spacing:-.4px;line-height:1.15;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:0 2px 18px rgba(0,0,0,.85);
+}
+.present-note{
+  margin-top:4px;font-size:var(--nt);color:var(--ink-dim);line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  text-shadow:0 2px 14px rgba(0,0,0,.85);
+}
+
+/* ---------- controles ---------- */
+.present-bar{
+  grid-row:3;justify-self:center;pointer-events:auto;max-width:100%;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:999px;
+  background:rgba(12,18,26,.82);border:1px solid var(--line);
+  box-shadow:0 14px 40px rgba(0,0,0,.55);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:opacity .3s ease,transform .3s ease;
+}
+.pbtn{
+  display:grid;place-items:center;width:56px;height:56px;flex:none;
+  border:0;border-radius:50%;background:#1a2433;color:var(--ink);cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.pbtn svg{width:26px;height:26px}
+.pbtn:hover{background:#243146}
+.pbtn:active{transform:scale(.94)}
+.pbtn.play{width:68px;height:68px;background:var(--accent);color:#06231a}
+.pbtn.play svg{width:32px;height:32px}
+.pbtn.play:hover{background:#45e79a}
+.pbtn.on{background:var(--accent);color:#06231a}
+.pbtn.exit{background:transparent;border:1px solid var(--line);color:var(--ink-dim)}
+.pbtn.exit:hover{background:#2a161c;color:#ffb4b4;border-color:#4a2530}
+.present-count{
+  min-width:74px;text-align:center;font-weight:700;font-size:16px;
+  font-variant-numeric:tabular-nums;color:var(--ink-dim);
+}
+
+/* Nadie toca nada: los controles se apartan y queda solo la jugada.
+   Vuelven con cualquier toque, tecla o movimiento del mouse. */
+.present-ui.idle .present-bar{opacity:0;transform:translateY(18px)}
+.present-ui.idle .present-head{opacity:.5}
+
+/* ---------- pantallas ---------- */
+@media (pointer:coarse){
+  .pbtn{width:64px;height:64px}
+  .pbtn svg{width:29px;height:29px}
+  .pbtn.play{width:78px;height:78px}
+  .pbtn.play svg{width:36px;height:36px}
+  .present-count{font-size:18px;min-width:84px}
+}
+@media (min-width:1600px){
+  .present-head{--ph:clamp(34px,3.4vw,52px);--nt:clamp(17px,1.5vw,24px)}
+  .present-bar{gap:14px;padding:12px 18px}
+  .pbtn{width:68px;height:68px}
+  .pbtn svg{width:31px;height:31px}
+  .pbtn.play{width:82px;height:82px}
+  .pbtn.play svg{width:38px;height:38px}
+  .present-count{font-size:19px;min-width:92px}
+}
+@media (min-width:2100px){
+  .present-head{--ph:clamp(44px,2.4vw,56px);--nt:clamp(20px,1.1vw,26px)}
+  .pbtn{width:78px;height:78px}
+  .pbtn svg{width:36px;height:36px}
+  .pbtn.play{width:94px;height:94px}
+  .pbtn.play svg{width:44px;height:44px}
+  .present-count{font-size:22px;min-width:104px}
+}
+/* Un telefono de pie tiene 390px de ancho: seis botones de 64 no caben y la
+   barra se sale de la pantalla. Aca se encogen para entrar enteros. */
+@media (max-width:520px){
+  .present-bar{gap:6px;padding:8px 10px}
+  .pbtn{width:48px;height:48px}
+  .pbtn svg{width:23px;height:23px}
+  .pbtn.play{width:58px;height:58px}
+  .pbtn.play svg{width:27px;height:27px}
+  .present-count{font-size:14px;min-width:50px}
+}
+/* Y en los mas angostos (360 - 375px) ni asi: el contador sube a su propia
+   linea dentro de la pastilla en vez de perder un boton. */
+@media (max-width:410px){
+  .present-bar{flex-wrap:wrap;justify-content:center;border-radius:28px;row-gap:2px}
+  .present-count{order:-1;width:100%;min-width:0;font-size:13px}
+}
+/* Un telefono acostado tiene 390px de alto: la fase y los botones grandes se
+   comen el campo. Ahi la barra se encoge y la nota se calla. */
+@media (max-height:460px){
+  .present-ui{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+  .present-head{--ph:18px;height:calc(18px * 1.15)}
+  .present-note{display:none}
+  .present-bar{gap:8px;padding:7px 10px}
+  .pbtn{width:46px;height:46px}
+  .pbtn svg{width:22px;height:22px}
+  .pbtn.play{width:54px;height:54px}
+  .pbtn.play svg{width:25px;height:25px}
+  .present-count{font-size:14px;min-width:62px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .present-bar,.present-head{transition:none}
+}
