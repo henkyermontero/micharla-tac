@@ -196,6 +196,10 @@ resto de la aplicación.
   `micharlatac.*`. Ver `js/legacy.js`, que no importa nada a propósito y es
   importado por `i18n.js` y `state.js` para que corra antes que cualquier
   lectura de `localStorage`.
+- El balón se dibuja en dos versiones a propósito. En su tamaño normal mide
+  unos 24 px en pantalla y ahí los cinco parches del borde más el contorno se
+  comen el blanco y queda un borrón oscuro; por debajo de 13 px de radio se
+  dibuja solo el pentágono y las costuras. Ver `ballGlyph` en `js/render.js`.
 - `css/present.css` va después de `css/styles.css` a propósito: gana por orden,
   sin necesitar `!important`.
 - `sw.js` cachea la lista `ASSETS`. Si agregas un archivo al proyecto, agrégalo
