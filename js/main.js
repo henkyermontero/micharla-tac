@@ -304,7 +304,7 @@ function buildPalette() {
     }
     b.onclick = () => {
       if (item.tool) { setTool(item.tool); return; }
-      setPlace({ kind: item.kind, team: item.team || null, id: item.id, label: item.label });
+      pickPlace(item);
     };
     wrap.appendChild(b);
   });
@@ -319,7 +319,7 @@ function buildEquipment() {
     b.textContent = t('kinds.' + kind);
     b.onclick = () => {
       if (kind === 'label') { setTool('text'); return; }
-      setPlace({ kind, id: kind, label: 'kinds.' + kind });
+      pickPlace({ kind, id: kind, label: 'kinds.' + kind });
     };
     wrap.appendChild(b);
   });
@@ -347,6 +347,23 @@ function setPlace(place) {
     $('#status').classList.remove('show');
     setTool('select');
   }
+}
+
+/**
+ * Elegir una ficha de la paleta. Un segundo toque rapido sobre la misma ficha la
+ * desarma: en una tablet no hay tecla Esc, y por debajo de 860px la barra de
+ * estado que decia "Esc para salir" ni siquiera se veia, asi que la paleta se
+ * quedaba trabada en modo colocar sin salida a la vista.
+ */
+let lastPick = { id: null, at: 0 };
+const DOUBLE_TAP_MS = 450;
+
+function pickPlace(item) {
+  const now = performance.now();
+  const again = lastPick.id === item.id && now - lastPick.at < DOUBLE_TAP_MS;
+  lastPick = { id: item.id, at: now };
+  if (again && state.place && state.place.id === item.id) { setPlace(null); return; }
+  setPlace({ kind: item.kind, team: item.team || null, id: item.id, label: item.label });
 }
 
 function buildSelectOptions() {

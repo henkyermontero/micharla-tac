@@ -73,7 +73,7 @@ const DICT = {
     },
     place: {
       home: 'Jugador local', away: 'Jugador visitante', gkHome: 'Portero local',
-      gkAway: 'Portero visitante', hint: 'Haz clic en el campo para colocar. Esc para salir.',
+      gkAway: 'Portero visitante', hint: 'Toca el campo para colocar. Doble toque en la ficha para salir, o Esc.',
       active: 'Colocando', palette: 'Fichas rápidas',
     },
     time: {
@@ -196,7 +196,7 @@ const DICT = {
     },
     place: {
       home: 'Home player', away: 'Away player', gkHome: 'Home keeper', gkAway: 'Away keeper',
-      hint: 'Click the pitch to place. Esc to stop.', active: 'Placing', palette: 'Quick tokens',
+      hint: 'Tap the pitch to place. Double tap the token to stop, or Esc.', active: 'Placing', palette: 'Quick tokens',
     },
     time: {
       play: 'Play', pause: 'Pause', prev: 'Previous frame', next: 'Next frame', loop: 'Loop',

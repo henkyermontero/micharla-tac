@@ -583,6 +583,13 @@ input[type=range]{accent-color:var(--accent);width:100%}
    lands on the mobile layout, but it is still a tablet and should get tablet
    sized controls, not phone ones. Its panel is an overlay there, so the wider
    rail costs the pitch nothing. */
+/* La pista de "doble toque para salir" vivia en la barra de estado, que estaba
+   oculta por debajo de 860px. En una tablet hay sitio de sobra y es justo donde
+   no existe la tecla Esc, asi que ahi se muestra. En el telefono sigue oculta. */
+@media (pointer:coarse) and (min-width:700px){
+  .status{display:block}
+}
+
 @media (pointer:coarse) and (max-width:700px){
   :root{--rail:58px}
   .rail .tool{width:50px;height:44px}

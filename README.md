@@ -56,7 +56,9 @@ arcos portátiles que existen. No pasan por el tamaño global de fichas a
 propósito: agrandar las fichas no puede agrandar una portería.
 
 La paleta flotante coloca fichas en cadena: eliges una, tocas el campo las veces
-que haga falta y sales con `Esc`. Los números se autoincrementan por equipo.
+que haga falta y sales con **doble toque en la misma ficha** o con `Esc`. Los
+números se autoincrementan por equipo. El doble toque existe porque en una
+tablet no hay tecla `Esc`: sin él la paleta se quedaba trabada en modo colocar.
 
 **Dibujo** Pase, desmarque, conducción, remate, línea, dibujo libre, zona
 rectangular, óvalo, zona libre punto a punto, bloqueo y foco de atención.
