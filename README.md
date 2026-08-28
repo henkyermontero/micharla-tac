@@ -15,8 +15,8 @@ Interfaz en español por defecto, con inglés disponible en el selector de idiom
 
 ```bash
 cd ~/micharla-tac
-python3 -m http.server 8787
-# abrir http://localhost:8787
+python3 -m http.server 8788
+# abrir http://localhost:8788
 ```
 
 No hay build. Cualquier hosting estático sirve (Vercel, GitHub Pages, Netlify):
