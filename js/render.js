@@ -34,6 +34,17 @@ export function markerRadius(rect, kind = 'player', size = 1) {
   return base * state.markerScale * size * (KINDS[kind] ? KINDS[kind].r : 1);
 }
 
+/**
+ * Cuanto ocupa una ficha para tocarla o para dibujarle el aro de seleccion.
+ * Casi siempre es su radio, pero la barrera es una fila de maniquies, no un
+ * punto: sin esto solo se podria agarrar por el maniqui del medio.
+ */
+export function objectReach(rect, o) {
+  const r = markerRadius(rect, o.kind, o.size || 1);
+  if (o.kind === 'barrier') return ((barrierCount(o) - 1) / 2) * r * BARRIER_STEP + r;
+  return r;
+}
+
 /* ---------- interpolation ---------- */
 
 export function positionsAt(doc, index, t) {
@@ -296,6 +307,33 @@ function discGlyph(ctx, x, y, r, color) {
   ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = Math.max(1, r * 0.12); ctx.stroke();
 }
 
+const BARRIER_STEP = 2.05;   // separacion entre maniquies, en radios
+export const barrierCount = (o) => Math.max(2, Math.min(6, o.count || 4));
+
+/**
+ * La barrera: los maniquies de tiro libre puestos en fila, como se plantan en
+ * el entrenamiento. Es una sola ficha, asi se coloca, se gira hacia el balon y
+ * se mueve entera de una vez. El numero de maniquies se cambia en el panel.
+ *
+ * Cada maniqui se contragira: girar la barrera apunta la fila hacia el balon,
+ * no tumba los maniquies de costado. El maniqui suelto si gira, que para eso
+ * esta.
+ */
+function barrierGlyph(ctx, x, y, r, count, color, rot) {
+  const step = r * BARRIER_STEP;
+  const start = -((count - 1) / 2) * step;
+  const back = ((rot || 0) * Math.PI) / -180;
+  for (let i = 0; i < count; i++) {
+    const fx = x + start + i * step;
+    if (!back) { mannequinGlyph(ctx, fx, y, r, color); continue; }
+    ctx.save();
+    ctx.translate(fx, y);
+    ctx.rotate(back);
+    mannequinGlyph(ctx, 0, 0, r, color);
+    ctx.restore();
+  }
+}
+
 function mannequinGlyph(ctx, x, y, r, color) {
   ctx.fillStyle = color || '#cbd5e1';
   ctx.beginPath(); ctx.arc(x, y - r * 0.85, r * 0.5, 0, Math.PI * 2); ctx.fill();
@@ -412,6 +450,7 @@ export function drawObject(ctx, rect, o, p, opts = {}) {
     case 'cone': coneGlyph(ctx, x, y, r, o.color || '#ff8c1a'); break;
     case 'disc': discGlyph(ctx, x, y, r, o.color || '#ffd166'); break;
     case 'mannequin': mannequinGlyph(ctx, x, y, r, o.color || '#cbd5e1'); break;
+    case 'barrier': barrierGlyph(ctx, x, y, r, barrierCount(o), o.color || '#cbd5e1', o.rot); break;
     case 'referee': refereeGlyph(ctx, x, y, r); break;
     case 'goal':
     case 'minigoal': goalGlyph(ctx, x, y, rect, o.kind, o.size || 1, o.color || '#ffffff'); break;
@@ -598,7 +637,7 @@ function drawSelection(ctx, rect, pos) {
     const p = pos[o.id];
     if (!p) continue;
     const [x, y] = toPx(rect, p.x, p.y);
-    const r = markerRadius(rect, o.kind, o.size || 1) * 1.55;
+    const r = objectReach(rect, o) * 1.55;
     ctx.save();
     ctx.strokeStyle = '#7ee2b8';
     ctx.lineWidth = 2;
@@ -672,7 +711,7 @@ export function paint(ctx, canvasW, canvasH, opts = {}) {
   const pos = playing ? positionsAt(doc, index, t) : frame(index).pos;
   if (!doc.objects.length && !playing && opts.ghost !== false) drawGhostFormation(ctx, rect);
 
-  const order = ['ladder', 'hurdle', 'goal', 'minigoal', 'disc', 'cone', 'flag', 'mannequin', 'label', 'referee', 'player', 'keeper', 'ball'];
+  const order = ['ladder', 'hurdle', 'goal', 'minigoal', 'disc', 'cone', 'flag', 'barrier', 'mannequin', 'label', 'referee', 'player', 'keeper', 'ball'];
   const sorted = doc.objects.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   for (const o of sorted) drawObject(ctx, rect, o, pos[o.id]);
 

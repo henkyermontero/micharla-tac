@@ -18,6 +18,9 @@ export const KINDS = {
   cone:      { r: 0.5 },
   disc:      { r: 0.46 },
   mannequin: { r: 0.55 },
+  // La barrera es una fila de maniquies: cada figura mide lo mismo que un
+  // maniqui suelto, y cuantas hay lo dice o.count (ver barrierCount).
+  barrier:   { r: 0.55 },
   // Los dos arcos no usan este radio: se miden en metros, ver GOALS en pitch.js
   // y markerRadius en render.js. Quedan aqui para que KINDS siga siendo la lista
   // completa de fichas.

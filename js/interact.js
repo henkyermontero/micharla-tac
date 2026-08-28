@@ -4,7 +4,7 @@ import {
   state, frame, shapesOf, findShape, setPos, addShape, removeShape, removeObject,
   addObject, edit, snapshot, commit, selection, objectById, nextNumber,
 } from './state.js';
-import { toBoard, toPx, markerRadius, shapeHandles, shapePoints } from './render.js';
+import { toBoard, toPx, markerRadius, objectReach, shapeHandles, shapePoints } from './render.js';
 import { snap, zoomAt, panBy, clampPan, applyView, view } from './view.js';
 
 const DRAW_TOOLS = ['pass', 'run', 'dribble', 'shot', 'line', 'pen', 'zone', 'ellipse', 'block', 'spot'];
@@ -22,13 +22,13 @@ function dist2seg(px, py, a, b) {
 
 export function hitObject(rect, bx, by) {
   const f = frame();
-  const order = ['ball', 'player', 'keeper', 'referee', 'label', 'mannequin', 'flag', 'disc', 'cone', 'minigoal', 'goal', 'hurdle', 'ladder'];
+  const order = ['ball', 'player', 'keeper', 'referee', 'label', 'mannequin', 'flag', 'disc', 'cone', 'barrier', 'minigoal', 'goal', 'hurdle', 'ladder'];
   const list = state.doc.objects.slice().sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind));
   const [mx, my] = toPx(rect, bx, by);
   for (const o of list) {
     const p = f.pos[o.id];
     if (!p) continue;
-    const r = markerRadius(rect, o.kind, o.size || 1) * (o.kind === 'label' ? 2.2 : 1.3);
+    const r = objectReach(rect, o) * (o.kind === 'label' ? 2.2 : 1.3);
     const [ox, oy] = toPx(rect, p.x, p.y);
     if (Math.hypot(mx - ox, my - oy) <= r) return o;
   }

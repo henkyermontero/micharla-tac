@@ -24,13 +24,14 @@ const DICT = {
     },
     kinds: {
       player: 'Jugador', keeper: 'Portero', ball: 'Balón', cone: 'Cono', disc: 'Plato',
-      mannequin: 'Maniquí', goal: 'Arco reglamentario', minigoal: 'Arco pequeño',
+      mannequin: 'Maniquí', barrier: 'Barrera de maniquíes',
+      goal: 'Arco reglamentario', minigoal: 'Arco pequeño',
       flag: 'Pica', ladder: 'Escalera',
       hurdle: 'Valla', referee: 'Árbitro', label: 'Texto',
     },
     sel: {
       title: 'Selección', number: 'Núm.', name: 'Nombre', color: 'Color', size: 'Tamaño',
-      rotation: 'Giro', hideNumber: 'Ocultar número', lock: 'Bloquear', locked: 'Bloqueado',
+      rotation: 'Giro', count: 'Maniquíes', hideNumber: 'Ocultar número', lock: 'Bloquear', locked: 'Bloqueado',
       duplicate: 'Duplicar', front: 'Al frente', back: 'Al fondo', delete: 'Eliminar',
       width: 'Grosor', opacity: 'Opacidad', fill: 'Relleno', dash: 'Discontinua',
       arrow: 'Punta de flecha', many: 'elementos seleccionados', none: 'Nada seleccionado',
@@ -151,13 +152,14 @@ const DICT = {
     },
     kinds: {
       player: 'Player', keeper: 'Goalkeeper', ball: 'Ball', cone: 'Cone', disc: 'Disc',
-      mannequin: 'Mannequin', goal: 'Full-size goal', minigoal: 'Small goal',
+      mannequin: 'Mannequin', barrier: 'Mannequin wall',
+      goal: 'Full-size goal', minigoal: 'Small goal',
       flag: 'Pole', ladder: 'Ladder',
       hurdle: 'Hurdle', referee: 'Referee', label: 'Text',
     },
     sel: {
       title: 'Selection', number: 'No.', name: 'Name', color: 'Colour', size: 'Size',
-      rotation: 'Rotation', hideNumber: 'Hide number', lock: 'Lock', locked: 'Locked',
+      rotation: 'Rotation', count: 'Figures', hideNumber: 'Hide number', lock: 'Lock', locked: 'Locked',
       duplicate: 'Duplicate', front: 'Bring forward', back: 'Send back', delete: 'Delete',
       width: 'Width', opacity: 'Opacity', fill: 'Fill', dash: 'Dashed', arrow: 'Arrowhead',
       many: 'items selected', none: 'Nothing selected',

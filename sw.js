@@ -2,7 +2,7 @@
 //
 // Bump CACHE on every release that changes a file below. The name is the only
 // thing that evicts the old copy.
-const CACHE = 'micharlatac-v9';
+const CACHE = 'micharlatac-v10';
 const ASSETS = [
   './', './index.html', './css/styles.css', './css/present.css', './manifest.webmanifest',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png',

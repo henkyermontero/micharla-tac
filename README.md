@@ -47,6 +47,12 @@ Formaciones por tamaño de equipo: 11 (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2 y má
 9, 7 y futsal. Material: balón, conos, platos, maniquíes, picas, escaleras,
 vallas, árbitro y textos.
 
+**Barrera** Los maniquíes de tiro libre en fila, como se plantan en el
+entrenamiento. Es una sola ficha: se coloca, se gira hacia el balón y se mueve
+entera. De 2 a 6 maniquíes con el control del panel. Al girarla se apunta la
+fila, los maniquíes no se tumban de costado; el maniquí suelto sí gira, que
+para eso está.
+
 **Arcos** Dos, y los dos miden lo que miden en la cancha: el reglamentario de
 7.32 m de boca (regla 1 de la IFAB) y el de entrenamiento de 3 m. Se ven desde
 arriba con la boca abierta y los dos postes marcados, así que se lee de un
